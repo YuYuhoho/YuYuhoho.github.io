@@ -1,0 +1,3890 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Penguin Atlas｜企鵝探索地圖</title>
+  <meta name="description" content="全球現存全部 18 種企鵝物種完整生態科普資料庫。具備互動式世界地圖、野生參考照片大圖展示、形態鑑定特徵標註與相似種相片比對功能。" />
+  <meta property="og:title" content="Penguin Atlas｜企鵝探索地圖" />
+  <meta property="og:description" content="探索全球現存全部 18 種企鵝的野生棲地、生物特徵、生態習性與真實參考相片。" />
+  <meta property="og:type" content="website" />
+
+  <style>
+    /* ==========================================================================
+       自然科普設計系統 (Natural Science Educational Theme)
+       ========================================================================== */
+    :root {
+      --ocean-deep: #07172b;
+      --ocean-dark: #0f2744;
+      --ocean-mid: #1b4965;
+      --ocean-blue: #0284c7;
+      --ocean-light: #e0f2fe;
+      --ice-white: #f8fafc;
+      --ice-tint: #f1f5f9;
+      --warm-sand: #fef3c7;
+      --warm-amber: #d97706;
+      --sand-gold: #f59e0b;
+      --sage-green: #38a169;
+      --coral-accent: #e11d48;
+      --text-dark: #0f172a;
+      --text-body: #334155;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --border-warm: #e2e8f0;
+      --border-ocean: #cbd5e1;
+      --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+      --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+      --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-page);
+      color: var(--text-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 頂部導航列 */
+    .site-header {
+      background: var(--ocean-dark);
+      color: #ffffff;
+      padding: 0.85rem 1.5rem;
+      border-bottom: 2px solid var(--ocean-mid);
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .brand-logo-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #38bdf8 0%, #0369a1 100%);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+    }
+
+    .brand-title span.sub {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #bae6fd;
+    }
+
+    .header-tagline {
+      font-size: 0.82rem;
+      color: #94a3b8;
+    }
+
+    .header-taxonomy-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #7dd3fc;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+    }
+
+    /* 主容器 */
+    .app-main {
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      flex: 1;
+    }
+
+    /* 搜尋與篩選列 */
+    .control-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      pointer-events: none;
+      width: 18px;
+      height: 18px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.65rem 2.4rem 0.65rem 2.4rem;
+      border: 1px solid var(--border-ocean);
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      color: var(--text-dark);
+      background: #ffffff;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--ocean-blue);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .clear-search-btn {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #e2e8f0;
+      border: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      font-size: 11px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-dark);
+    }
+
+    .clear-search-btn:hover {
+      background: #cbd5e1;
+    }
+
+    .filter-group-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-right: 0.25rem;
+    }
+
+    .filter-chip {
+      background: #f1f5f9;
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-full);
+      padding: 0.35rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-body);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      user-select: none;
+    }
+
+    .filter-chip:hover {
+      background: #e2e8f0;
+      color: var(--text-dark);
+    }
+
+    .filter-chip.active {
+      background: var(--ocean-dark);
+      color: #ffffff;
+      border-color: var(--ocean-dark);
+      box-shadow: 0 2px 5px rgba(15, 39, 68, 0.2);
+    }
+
+    .filter-chip .count-badge {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: var(--radius-full);
+      padding: 0.05rem 0.4rem;
+      font-size: 0.75rem;
+    }
+
+    .filter-chip:not(.active) .count-badge {
+      background: #cbd5e1;
+      color: var(--text-dark);
+    }
+
+    .reset-filters-btn {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: var(--ocean-blue);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .reset-filters-btn:hover {
+      text-decoration: underline;
+    }
+
+    /* 主要互動區：雙欄佈局 (地圖 + 詳細資訊面板) */
+    .interactive-stage {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(360px, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .interactive-stage {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 地圖卡片容器 */
+    .map-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .map-header-bar {
+      padding: 0.75rem 1.25rem;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border-warm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .map-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--ocean-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .map-view-presets {
+      display: flex;
+      gap: 0.35rem;
+    }
+
+    .map-preset-btn {
+      background: #ffffff;
+      border: 1px solid var(--border-ocean);
+      border-radius: var(--radius-sm);
+      padding: 0.25rem 0.55rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-body);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .map-preset-btn:hover {
+      background: #f1f5f9;
+      border-color: var(--ocean-blue);
+      color: var(--ocean-blue);
+    }
+
+    /* SVG 世界地圖畫布容器 */
+    .map-viewport-wrapper {
+      position: relative;
+      background: #0a192f;
+      width: 100%;
+      aspect-ratio: 1000 / 580;
+      overflow: hidden;
+    }
+
+    .world-map-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      transition: viewBox 0.4s ease;
+    }
+
+    /* 懸浮 Tooltip */
+    .pin-tooltip {
+      position: absolute;
+      background: rgba(15, 23, 42, 0.92);
+      color: #ffffff;
+      padding: 0.45rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      line-height: 1.35;
+      pointer-events: none;
+      z-index: 30;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(4px);
+      transform: translate(-50%, -125%);
+      display: none;
+    }
+
+    /* 地圖標記樣式 (固定絕對座標，杜絕任何畫面跳動) */
+    .map-pin {
+      cursor: pointer;
+      outline: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .map-pin circle {
+      transform-origin: center;
+      transition: r 0.2s ease, stroke-width 0.2s ease, fill 0.2s ease;
+    }
+
+    .map-pin .pin-pulse {
+      animation: pinPulseAnim 2.2s infinite ease-out;
+      pointer-events: none;
+    }
+
+    @keyframes pinPulseAnim {
+      0% { r: 12; opacity: 0.6; }
+      50% { r: 24; opacity: 0.15; }
+      100% { r: 28; opacity: 0; }
+    }
+
+    .map-pin:hover .pin-outer {
+      stroke-width: 3.5px;
+    }
+
+    .map-pin.active .pin-outer {
+      stroke-width: 4px;
+      filter: drop-shadow(0 0 6px #38bdf8);
+    }
+
+    .pin-label {
+      user-select: none;
+      pointer-events: none;
+      letter-spacing: 0.2px;
+      transition: fill 0.2s ease, font-weight 0.2s ease;
+    }
+
+    /* 地圖底端圖例 */
+    .map-footer-legend {
+      padding: 0.65rem 1.25rem;
+      background: #f8fafc;
+      border-top: 1px solid var(--border-warm);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .legend-items {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+
+    .legend-dot.polar { background: #38bdf8; }
+    .legend-dot.subpolar { background: #2dd4bf; }
+    .legend-dot.temperate { background: #4ade80; }
+    .legend-dot.warm { background: #fbbf24; }
+
+    /* 詳細資訊面板 (Info Panel) */
+    .detail-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .card-header-bar {
+      padding: 0.85rem 1.25rem;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border-warm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--ocean-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .iucn-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .iucn-lc { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+    .iucn-nt { background: #fef9c3; color: #854d0e; border: 1px solid #fef08a; }
+    .iucn-vu { background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
+    .iucn-en { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+    .iucn-cr { background: #450a0a; color: #ffffff; }
+
+    .detail-body {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .detail-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .species-titles h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--ocean-dark);
+      line-height: 1.2;
+    }
+
+    .species-titles .names-sub {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    .species-titles .scientific-name {
+      font-style: italic;
+      color: var(--ocean-mid);
+      font-weight: 600;
+    }
+
+    /* 企鵝照片展示區 (含參考圖片控制工具) */
+    .detail-photo-wrapper {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      aspect-ratio: 16 / 10;
+      background: #0f2744;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+      cursor: zoom-in;
+    }
+
+    .detail-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+
+    .detail-photo-wrapper:hover .detail-img {
+      transform: scale(1.03);
+    }
+
+    .ref-badge-top {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      background: rgba(15, 39, 68, 0.85);
+      color: #ffffff;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-full);
+      font-size: 0.72rem;
+      font-weight: 600;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      pointer-events: none;
+    }
+
+    .zoom-hint-badge {
+      position: absolute;
+      bottom: 0.75rem;
+      right: 0.75rem;
+      background: rgba(0, 0, 0, 0.75);
+      color: #ffffff;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-full);
+      font-size: 0.72rem;
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      pointer-events: none;
+      transition: all 0.2s;
+    }
+
+    .detail-photo-wrapper:hover .zoom-hint-badge {
+      background: rgba(2, 132, 199, 0.9);
+    }
+
+    /* 照片特徵標註圖層 */
+    .photo-annotations-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      display: none;
+    }
+
+    .photo-annotations-layer.show {
+      display: block;
+    }
+
+    .photo-annotation-point {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .point-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #f59e0b;
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: bold;
+      animation: pointPulse 1.8s infinite;
+    }
+
+    @keyframes pointPulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+      70% { transform: scale(1.15); box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+
+    .point-callout {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.92);
+      color: #ffffff;
+      padding: 0.35rem 0.65rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.72rem;
+      white-space: nowrap;
+      pointer-events: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* 參考相片專屬功能列 (Reference Photo Action Bar) */
+    .ref-photo-action-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      background: #f1f5f9;
+      padding: 0.55rem 0.85rem;
+      border-radius: var(--radius-md);
+      font-size: 0.78rem;
+    }
+
+    .ref-action-btns {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .ref-tool-btn {
+      background: #ffffff;
+      border: 1px solid var(--border-ocean);
+      padding: 0.3rem 0.65rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--ocean-dark);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.15s;
+    }
+
+    .ref-tool-btn:hover {
+      background: var(--ocean-blue);
+      border-color: var(--ocean-blue);
+      color: #ffffff;
+    }
+
+    .ref-tool-btn.active {
+      background: var(--ocean-dark);
+      border-color: var(--ocean-dark);
+      color: #ffffff;
+    }
+
+    .photo-credit-text {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 200px;
+    }
+
+    /* 參考圖片生物特徵條 (Identification Features Pill Row) */
+    .diagnostic-traits-bar {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: var(--radius-md);
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .diagnostic-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #1e40af;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .trait-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: #ffffff;
+      border: 1px solid #93c5fd;
+      color: #1e3a8a;
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* 棲地標籤群 */
+    .habitat-tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .habitat-tag {
+      background: #f1f5f9;
+      color: var(--text-body);
+      border: 1px solid var(--border-warm);
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    /* 核心科普簡介 */
+    .summary-section {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text-body);
+      border-left: 3px solid var(--ocean-mid);
+      padding-left: 0.85rem;
+    }
+
+    /* 數值指標卡 */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.65rem;
+    }
+
+    .metric-box {
+      background: #f8fafc;
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-md);
+      padding: 0.65rem 0.85rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .metric-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .metric-val {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--ocean-dark);
+      margin-top: 0.15rem;
+    }
+
+    /* 企鵝冷知識 (Fun Fact) */
+    .fun-fact-box {
+      background: linear-gradient(135deg, #fef9c3 0%, #fef3c7 100%);
+      border: 1px solid #fde68a;
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    .fun-fact-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .fun-fact-content h4 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 0.2rem;
+    }
+
+    .fun-fact-content p {
+      font-size: 0.84rem;
+      color: #78350f;
+      line-height: 1.5;
+    }
+
+    /* 代表性地點與座標 */
+    .geo-location-box {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.65rem 0.85rem;
+      background: #f8fafc;
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      color: var(--text-dark);
+    }
+
+    .geo-location-box svg {
+      width: 16px;
+      height: 16px;
+      color: var(--ocean-blue);
+      flex-shrink: 0;
+    }
+
+    /* 面板底部導航切換鈕 */
+    .detail-nav-footer {
+      padding: 0.75rem 1.25rem;
+      background: #f8fafc;
+      border-top: 1px solid var(--border-warm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .nav-arrow-btn {
+      background: #ffffff;
+      border: 1px solid var(--border-ocean);
+      border-radius: var(--radius-sm);
+      padding: 0.4rem 0.85rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--ocean-dark);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .nav-arrow-btn:hover {
+      background: #f1f5f9;
+      border-color: var(--ocean-blue);
+      color: var(--ocean-blue);
+    }
+
+    .btn-focus-map {
+      background: var(--ocean-dark);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 0.45rem 1rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s;
+    }
+
+    .btn-focus-map:hover {
+      background: var(--ocean-mid);
+    }
+
+    /* ==========================================================================
+       企鵝種類圖鑑專區 (Species Gallery & Modes)
+       ========================================================================== */
+    .gallery-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .gallery-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border-warm);
+      padding-bottom: 1rem;
+    }
+
+    .gallery-title-wrap h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--ocean-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .gallery-title-wrap p {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* 顯示模式切換工具列 */
+    .view-mode-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #f1f5f9;
+      padding: 0.25rem;
+      border-radius: var(--radius-md);
+      flex-wrap: wrap;
+    }
+
+    .view-toggle-btn {
+      background: transparent;
+      border: none;
+      padding: 0.4rem 0.85rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.15s;
+    }
+
+    .view-toggle-btn:hover {
+      color: var(--text-dark);
+    }
+
+    .view-toggle-btn.active {
+      background: #ffffff;
+      color: var(--ocean-dark);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .gallery-count-badge {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: #e2e8f0;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+    }
+
+    /* 圖鑑檔案卡片網格 (Card View) */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .penguin-card {
+      background: #ffffff;
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .penguin-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--border-ocean);
+    }
+
+    .penguin-card.selected {
+      border: 2px solid var(--ocean-blue);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+    }
+
+    .card-photo-box {
+      position: relative;
+      height: 180px;
+      background: #0f2744;
+      overflow: hidden;
+    }
+
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .penguin-card:hover .card-img {
+      transform: scale(1.05);
+    }
+
+    .card-badge-top {
+      position: absolute;
+      top: 0.6rem;
+      left: 0.6rem;
+      background: rgba(15, 39, 68, 0.85);
+      color: #ffffff;
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--radius-full);
+      font-size: 0.7rem;
+      font-weight: 600;
+      backdrop-filter: blur(4px);
+    }
+
+    .card-active-indicator {
+      position: absolute;
+      bottom: 0.6rem;
+      right: 0.6rem;
+      background: var(--ocean-blue);
+      color: #ffffff;
+      padding: 0.15rem 0.55rem;
+      border-radius: var(--radius-full);
+      font-size: 0.68rem;
+      font-weight: 700;
+      display: none;
+    }
+
+    .penguin-card.selected .card-active-indicator {
+      display: block;
+    }
+
+    .card-body {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+    }
+
+    .card-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .card-name-zh {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--ocean-dark);
+    }
+
+    .card-name-en {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .card-region-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      color: var(--text-body);
+      line-height: 1.35;
+    }
+
+    .card-region-row svg {
+      width: 13px;
+      height: 13px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 0.6rem;
+      border-top: 1px solid var(--border-warm);
+      font-size: 0.78rem;
+      margin-top: auto;
+    }
+
+    .card-iucn-pill {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.15rem 0.45rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .card-action-hint {
+      color: var(--ocean-blue);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+
+    /* 參考圖片相片牆模式 (Photo Showcase Mode) */
+    .gallery-grid.photo-mode {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .gallery-grid.photo-mode .penguin-card {
+      border-radius: var(--radius-lg);
+    }
+
+    .gallery-grid.photo-mode .card-photo-box {
+      height: 230px;
+    }
+
+    .gallery-grid.photo-mode .card-photo-box::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(15, 23, 42, 0.8) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .gallery-grid.photo-mode .card-photo-overlay {
+      position: absolute;
+      bottom: 0.75rem;
+      left: 0.75rem;
+      right: 0.75rem;
+      z-index: 2;
+      color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .card-photo-overlay h4 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    }
+
+    .card-photo-overlay p {
+      font-size: 0.75rem;
+      color: #cbd5e1;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    }
+
+    .card-zoom-btn {
+      background: rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #ffffff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .card-zoom-btn:hover {
+      background: var(--ocean-blue);
+      border-color: var(--ocean-blue);
+      transform: scale(1.1);
+    }
+
+    /* 生態特徵比對表模式 (Comparison Matrix View) */
+    .comparison-container {
+      background: #ffffff;
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      box-shadow: var(--shadow-sm);
+      display: none;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      min-width: 850px;
+    }
+
+    .comparison-table th {
+      background: #f1f5f9;
+      color: var(--ocean-dark);
+      padding: 0.85rem 1rem;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid var(--border-ocean);
+      white-space: nowrap;
+    }
+
+    .comparison-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #e2e8f0;
+      color: var(--text-body);
+      vertical-align: middle;
+    }
+
+    .comparison-table tr:hover {
+      background: #f8fafc;
+      cursor: pointer;
+    }
+
+    .comparison-table tr.active-row {
+      background: var(--ocean-light);
+    }
+
+    .table-thumb {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      display: block;
+      background: #0f2744;
+    }
+
+    /* 相似種相片比對模式 (Side-by-side Photo Comparison Mode) */
+    .sidebyside-container {
+      display: none;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .sidebyside-header {
+      background: #f8fafc;
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .sidebyside-intro {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .sidebyside-intro h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ocean-dark);
+    }
+
+    .presets-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .preset-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .preset-btn {
+      background: #ffffff;
+      border: 1px solid var(--border-ocean);
+      border-radius: var(--radius-full);
+      padding: 0.25rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--ocean-dark);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .preset-btn:hover {
+      background: var(--ocean-blue);
+      border-color: var(--ocean-blue);
+      color: #ffffff;
+    }
+
+    .compare-selectors-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding-top: 0.5rem;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .compare-select-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .compare-select-wrap label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--ocean-dark);
+    }
+
+    .compare-dropdown {
+      padding: 0.45rem 1.75rem 0.45rem 0.75rem;
+      border: 1px solid var(--border-ocean);
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--ocean-dark);
+      background: #ffffff;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .compare-vs-badge {
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: #ea580c;
+      background: #ffedd5;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* 左右雙欄比對卡 */
+    .sidebyside-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .sidebyside-cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sidebyside-card {
+      background: #ffffff;
+      border: 2px solid var(--border-ocean);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebyside-photo-box {
+      position: relative;
+      height: 260px;
+      background: #0f2744;
+      overflow: hidden;
+      cursor: zoom-in;
+    }
+
+    .sidebyside-photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+
+    .sidebyside-photo-box:hover img {
+      transform: scale(1.04);
+    }
+
+    .sidebyside-card-body {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      flex: 1;
+    }
+
+    .sidebyside-diff-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      margin-top: 0.5rem;
+    }
+
+    .sidebyside-diff-table td {
+      padding: 0.5rem 0.65rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .sidebyside-diff-table td.diff-key {
+      font-weight: 700;
+      color: var(--text-muted);
+      width: 32%;
+      background: #f8fafc;
+    }
+
+    /* 空狀態 (No Search Results) */
+    .empty-state {
+      background: var(--bg-card);
+      border: 2px dashed var(--border-ocean);
+      border-radius: var(--radius-lg);
+      padding: 3rem 1.5rem;
+      text-align: center;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      color: var(--text-light);
+    }
+
+    .empty-state h4 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .empty-state p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      max-width: 400px;
+    }
+
+    .btn-reset-filters {
+      background: var(--ocean-dark);
+      color: #ffffff;
+      border: none;
+      padding: 0.5rem 1.25rem;
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    .btn-reset-filters:hover {
+      background: var(--ocean-mid);
+    }
+
+    /* ==========================================================================
+       圖片放大視窗 (Lightbox Modal - 強化縮放、特徵標記與底端縮圖膠卷)
+       ========================================================================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 25, 47, 0.94);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-dialog {
+      background: #0f172a;
+      border-radius: var(--radius-lg);
+      max-width: 1000px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      animation: modalPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes modalPop {
+      0% { transform: scale(0.92); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1e293b;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+
+    .modal-titles h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .modal-titles p {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      font-style: italic;
+    }
+
+    .modal-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* 燈箱縮放控制列 (Modal Zoom Toolbar) */
+    .modal-zoom-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-sm);
+      padding: 0.2rem 0.4rem;
+    }
+
+    .btn-zoom {
+      background: none;
+      border: none;
+      color: #cbd5e1;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.45rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-zoom:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    .btn-zoom.active {
+      background: var(--ocean-blue);
+      color: #ffffff;
+    }
+
+    .modal-close-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.15s;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(239, 68, 68, 0.8);
+      transform: scale(1.05);
+    }
+
+    .modal-image-wrap {
+      background: #000000;
+      width: 100%;
+      height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      cursor: grab;
+    }
+
+    .modal-image-wrap:active {
+      cursor: grabbing;
+    }
+
+    .modal-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+      transition: transform 0.2s ease-out;
+      transform-origin: center center;
+      user-select: none;
+    }
+
+    .modal-nav-prev, .modal-nav-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(15, 39, 68, 0.75);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      z-index: 10;
+    }
+
+    .modal-nav-prev { left: 1rem; }
+    .modal-nav-next { right: 1rem; }
+
+    .modal-nav-prev:hover, .modal-nav-next:hover {
+      background: rgba(2, 132, 199, 0.9);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    /* 燈箱底部 18 種企鵝縮圖膠卷 (Filmstrip Thumbnail Carousel) */
+    .modal-filmstrip-wrap {
+      background: #111827;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.6rem 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #374151 #111827;
+    }
+
+    .modal-filmstrip-wrap::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .modal-filmstrip-wrap::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 3px;
+    }
+
+    .filmstrip-thumb {
+      width: 54px;
+      height: 54px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 2px solid transparent;
+      cursor: pointer;
+      position: relative;
+      opacity: 0.6;
+      transition: all 0.15s;
+    }
+
+    .filmstrip-thumb:hover {
+      opacity: 0.95;
+      transform: translateY(-2px);
+    }
+
+    .filmstrip-thumb.active {
+      opacity: 1;
+      border-color: #38bdf8;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+    }
+
+    .filmstrip-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .modal-footer {
+      padding: 0.85rem 1.25rem;
+      background: #1e293b;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+    }
+
+    .modal-diagnostic-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .modal-diagnostic-info strong {
+      color: #93c5fd;
+    }
+
+    .modal-credit {
+      color: #94a3b8;
+      font-size: 0.75rem;
+    }
+
+    /* 頁尾 */
+    .site-footer {
+      background: var(--ocean-dark);
+      color: #94a3b8;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.82rem;
+      border-top: 1px solid var(--ocean-mid);
+      margin-top: auto;
+    }
+
+    .site-footer p {
+      max-width: 800px;
+      margin: 0.25rem auto;
+      line-height: 1.5;
+    }
+
+    .site-footer strong {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部導航列 -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand-wrap">
+        <div class="brand-logo-icon">🐧</div>
+        <div>
+          <h1 class="brand-title">
+            Penguin Atlas
+            <span class="sub">｜ 企鵝探索地圖</span>
+          </h1>
+          <div class="header-tagline">全球現存全部 18 種企鵝生態科普資料庫 · 互動地圖與真實野生相片</div>
+        </div>
+      </div>
+      <div class="header-taxonomy-badge">
+        <span>📖 全球現存全部 18 種物種收錄</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主內容容器 -->
+  <main class="app-main">
+
+    <!-- 搜尋與篩選控制器 -->
+    <section class="control-panel" aria-label="企鵝搜尋與環境篩選">
+      <div class="search-row">
+        <!-- 關鍵字搜尋框 -->
+        <div class="search-input-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input 
+            type="text" 
+            id="searchInput" 
+            class="search-input" 
+            placeholder="搜尋企鵝名稱（例如：阿德利、皇帝、跳岩、Little）、學名或產地..." 
+            aria-label="搜尋企鵝名稱"
+          />
+          <button id="clearSearchBtn" class="clear-search-btn" title="清除搜尋關鍵字">✕</button>
+        </div>
+
+        <!-- 棲息環境標籤篩選按鈕群 -->
+        <div class="filter-group-wrap" role="group" aria-label="依棲息環境篩選">
+          <span class="filter-label">棲地篩選：</span>
+          <button class="filter-chip active" data-filter="all">
+            全部物種 <span class="count-badge" id="countAll">18</span>
+          </button>
+          <button class="filter-chip" data-filter="極地">
+            極地冰原 <span class="count-badge" id="countPolar">0</span>
+          </button>
+          <button class="filter-chip" data-filter="亞極地">
+            亞極地群島 <span class="count-badge" id="countSubpolar">0</span>
+          </button>
+          <button class="filter-chip" data-filter="溫帶">
+            溫帶沿岸 <span class="count-badge" id="countTemperate">0</span>
+          </button>
+          <button class="filter-chip" data-filter="較溫暖地區">
+            較溫暖/湧升流區 <span class="count-badge" id="countWarm">0</span>
+          </button>
+        </div>
+
+        <button id="resetAllBtn" class="reset-filters-btn">重設所有條件</button>
+      </div>
+    </section>
+
+    <!-- 核心互動舞台：地圖 + 詳細資訊面板 -->
+    <section class="interactive-stage" aria-label="世界企鵝分布地圖與詳細檔案">
+      
+      <!-- 互動式世界地圖卡片 -->
+      <div class="map-card" id="mapCard">
+        <div class="map-header-bar">
+          <div class="map-title">
+            <span>🗺️ 全球企鵝生態分布地圖 (南半球至赤道)</span>
+          </div>
+          <!-- 地圖視角快捷按鈕 -->
+          <div class="map-view-presets" role="group" aria-label="切換地圖視野">
+            <button class="map-preset-btn" data-view="world">全球總覽</button>
+            <button class="map-preset-btn" data-view="antarctica">南極洲焦點</button>
+            <button class="map-preset-btn" data-view="subantarctic">亞南極島鏈</button>
+            <button class="map-preset-btn" data-view="oceania">澳紐海域</button>
+          </div>
+        </div>
+
+        <!-- SVG 世界地圖視野 -->
+        <div class="map-viewport-wrapper" id="mapViewport">
+          <!-- 懸浮提示 Tooltip -->
+          <div id="mapTooltip" class="pin-tooltip"></div>
+
+<svg 
+            id="worldMapSvg" 
+            class="world-map-svg" 
+            viewBox="0 0 1000 580" 
+            preserveAspectRatio="xMidYMid meet"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <!-- 漸層定義 -->
+              <linearGradient id="oceanGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#0a1a2e"/>
+                <stop offset="45%" stop-color="#0f2947"/>
+                <stop offset="100%" stop-color="#14365c"/>
+              </linearGradient>
+
+              <linearGradient id="antarcticIceGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#e0f2fe"/>
+                <stop offset="60%" stop-color="#bae6fd"/>
+                <stop offset="100%" stop-color="#7dd3fc"/>
+              </linearGradient>
+
+              <filter id="glowEffect" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+              </filter>
+            </defs>
+
+            <!-- 海洋背景 -->
+            <rect width="1000" height="580" fill="url(#oceanGrad)" />
+
+            <!-- 經緯線網格 -->
+            <g class="map-grid-lines" stroke="#1e3a5f" stroke-width="0.8" opacity="0.45" stroke-dasharray="3,3">
+              <line x1="0" y1="140" x2="1000" y2="140" />
+              <line x1="0" y1="262" x2="1000" y2="262" stroke="#ea580c" stroke-width="1.2" opacity="0.6" stroke-dasharray="6,4" /> <!-- 赤道 0° -->
+              <line x1="0" y1="350" x2="1000" y2="350" stroke="#f59e0b" stroke-width="1.2" opacity="0.6" stroke-dasharray="6,4" /> <!-- 南回歸線 23.5°S -->
+              <line x1="0" y1="510" x2="1000" y2="510" stroke="#38bdf8" stroke-width="1.4" opacity="0.75" stroke-dasharray="6,4" /> <!-- 南極圈 66.5°S -->
+              
+              <!-- 經線 -->
+              <line x1="200" y1="0" x2="200" y2="580" />
+              <line x1="400" y1="0" x2="400" y2="580" />
+              <line x1="600" y1="0" x2="600" y2="580" />
+              <line x1="800" y1="0" x2="800" y2="580" />
+            </g>
+
+            <!-- 經緯線科學標註 -->
+            <g font-size="10" fill="#94a3b8" opacity="0.75" font-family="sans-serif">
+              <text x="12" y="258" fill="#fdba74">赤道 0° (Equator)</text>
+              <text x="12" y="346" fill="#fde047">南回歸線 23.5°S (Tropic of Capricorn)</text>
+              <text x="12" y="506" fill="#7dd3fc">南極圈 66.5°S (Antarctic Circle)</text>
+              <text x="70" y="300" fill="#38bdf8" opacity="0.4" font-size="12" letter-spacing="4">太平洋 PACIFIC</text>
+              <text x="440" y="380" fill="#38bdf8" opacity="0.4" font-size="12" letter-spacing="4">大西洋 ATLANTIC</text>
+              <text x="680" y="420" fill="#38bdf8" opacity="0.4" font-size="12" letter-spacing="4">印度洋 INDIAN</text>
+              <text x="440" y="535" fill="#bae6fd" opacity="0.65" font-size="11" font-weight="bold" letter-spacing="3">南大洋 (SOUTHERN OCEAN)</text>
+            </g>
+
+            <!-- 寒流示意 (說明企鵝為何能生活在溫帶與赤道) -->
+            <g class="ocean-currents" stroke-linecap="round">
+              <!-- 秘魯涼流 (洪堡涼流) -->
+              <path d="M 270 480 Q 255 370 248 270" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4,4" opacity="0.65"/>
+              <text x="210" y="380" fill="#7dd3fc" font-size="8.5" font-style="italic">秘魯涼流 (Humboldt)</text>
+
+              <!-- 本格拉寒流 -->
+              <path d="M 545 460 Q 535 380 525 320" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4,4" opacity="0.65"/>
+              <text x="540" y="350" fill="#7dd3fc" font-size="8.5" font-style="italic">本格拉寒流 (Benguela)</text>
+
+              <!-- 南極西風漂流 (環極洋流) -->
+              <path d="M 50 495 Q 500 505 950 495" fill="none" stroke="#bae6fd" stroke-width="1.5" stroke-dasharray="8,6" opacity="0.4"/>
+            </g>
+
+            <!-- 世界陸塊 SVG (自然大地色與北半球概略) -->
+            <!-- 北美洲與歐亞大陸 (柔和 slate 灰藍) -->
+            <g fill="#203a56" stroke="#162e47" stroke-width="1" opacity="0.85">
+              <!-- 北美洲概廓 -->
+              <path d="M 120 70 Q 180 50 250 80 Q 260 130 230 180 Q 250 200 270 230 L 260 245 L 240 220 L 210 200 L 170 170 L 140 120 Z"/>
+              <!-- 歐亞大陸概廓 -->
+              <path d="M 460 70 Q 560 50 720 70 Q 850 90 880 150 Q 820 180 780 200 Q 740 230 710 210 Q 640 200 580 180 Q 510 160 480 120 Z"/>
+            </g>
+
+            <!-- 南半球重點陸塊 (企鵝家園：高解析大地與冰雪質感) -->
+            <g fill="#2c4b6e" stroke="#1b3450" stroke-width="1.2">
+              <!-- 非洲大陸 -->
+              <path d="M 480 180 Q 530 170 580 190 Q 600 230 585 280 Q 565 340 555 430 L 540 435 Q 530 410 515 360 Q 480 300 460 250 Q 450 210 480 180 Z" fill="#2d4f73"/>
+              <!-- 馬達加斯加 -->
+              <path d="M 605 340 Q 615 350 610 390 L 600 385 Z" fill="#2d4f73"/>
+
+              <!-- 南大西洋群島 (特里斯坦-達庫尼亞群島與戈夫島 / 北跳岩棲地) -->
+              <circle cx="470" cy="440" r="3" fill="#4ade80" stroke="#ffffff" stroke-width="0.8"/>
+              <text x="440" y="430" fill="#94a3b8" font-size="7.5">特里斯坦群島</text>
+
+              <!-- 南美洲大陸 (特別細化秘魯、智利、巴塔哥尼亞與火地群島) -->
+              <path d="M 270 230 Q 330 225 350 280 Q 370 330 350 380 Q 335 430 325 470 L 315 500 L 305 495 Q 310 440 300 380 Q 285 300 265 260 Z" fill="#2c5378"/>
+              <!-- 火地島與周邊小島 -->
+              <circle cx="318" cy="505" r="4" fill="#385e87"/>
+              <circle cx="338" cy="492" r="3.5" fill="#38bdf8" stroke="#ffffff" stroke-width="0.8" title="福克蘭群島"/>
+              <text x="345" y="490" fill="#94a3b8" font-size="7.5">福克蘭群島</text>
+              <circle cx="400" cy="502" r="3" fill="#38bdf8" stroke="#ffffff" stroke-width="0.8" title="南喬治亞島"/>
+              <text x="406" y="504" fill="#94a3b8" font-size="7.5">南喬治亞島</text>
+
+              <!-- 加拉巴哥群島 (赤道上的企鵝奇蹟) -->
+              <g id="galapagosGroup">
+                <circle cx="246" cy="262" r="3.5" fill="#fbbf24" stroke="#ffffff" stroke-width="0.8"/>
+                <text x="200" y="255" fill="#fde047" font-size="8" font-weight="bold">加拉巴哥群島</text>
+              </g>
+
+              <!-- 澳洲大陸 -->
+              <path d="M 790 320 Q 860 300 890 330 Q 900 380 885 430 L 860 440 Q 820 445 785 410 Q 770 360 790 320 Z" fill="#335980"/>
+              <!-- 塔斯馬尼亞島 -->
+              <path d="M 865 460 Q 875 455 880 470 L 868 472 Z" fill="#335980"/>
+
+              <!-- 馬克夸利島 (皇家企鵝唯一繁殖地) -->
+              <circle cx="920" cy="510" r="3" fill="#2dd4bf" stroke="#ffffff" stroke-width="0.8"/>
+              <text x="926" y="513" fill="#94a3b8" font-size="7.5">馬克夸利島</text>
+
+              <!-- 紐西蘭北島與南島及亞南極群島 -->
+              <g id="newZealandGroup">
+                <!-- 北島 -->
+                <path d="M 960 425 Q 970 420 975 440 L 965 445 Z" fill="#38648f"/>
+                <!-- 南島 -->
+                <path d="M 948 450 Q 962 445 965 470 L 945 480 Z" fill="#38648f"/>
+                <text x="945" y="435" fill="#cbd5e1" font-size="8">紐西蘭</text>
+                <!-- 史納爾斯群島 / 邦蒂群島 -->
+                <circle cx="942" cy="482" r="2.5" fill="#4ade80" stroke="#ffffff" stroke-width="0.6"/>
+                <circle cx="978" cy="485" r="2.5" fill="#2dd4bf" stroke="#ffffff" stroke-width="0.6"/>
+              </g>
+            </g>
+
+            <!-- 南極洲大陸與巨大海冰架 (Antarctica - 冰雪白青色漸層) -->
+            <g id="antarcticaLand" stroke="#93c5fd" stroke-width="1.2">
+              <path d="M 100 580 
+                       Q 180 545 280 540 
+                       L 315 500 Q 325 485 330 515 L 340 535
+                       Q 420 525 520 530 
+                       Q 650 515 760 530 
+                       Q 850 540 950 580 Z" 
+                    fill="url(#antarcticIceGrad)" 
+              />
+              <!-- 南極半島 -->
+              <path d="M 315 535 L 325 490 L 332 505 L 325 540 Z" fill="#f0f9ff" stroke="#60a5fa" stroke-width="1.5"/>
+              <text x="270" y="565" fill="#0f2744" font-size="8.5" font-weight="bold" opacity="0.75">威德爾海</text>
+              <text x="750" y="565" fill="#0f2744" font-size="8.5" font-weight="bold" opacity="0.75">羅斯海冰架</text>
+              <text x="500" y="565" fill="#0c4a6e" font-size="12" font-weight="bold" text-anchor="middle" letter-spacing="4">南極大陸 ANTARCTICA</text>
+            </g>
+
+            <!-- 動態生成的企鵝地圖標記群組 (Pins Layer) -->
+            <g id="mapPinsLayer"></g>
+          </svg>
+        </div>
+
+        <!-- 地圖圖例與環境說明 -->
+        <div class="map-footer-legend">
+          <div class="legend-items">
+            <span style="font-weight:600; color:var(--text-dark);">環境色彩：</span>
+            <div class="legend-item"><span class="legend-dot polar"></span> 極地冰原</div>
+            <div class="legend-item"><span class="legend-dot subpolar"></span> 亞極地島嶼</div>
+            <div class="legend-item"><span class="legend-dot temperate"></span> 溫帶沿岸</div>
+            <div class="legend-item"><span class="legend-dot warm"></span> 較溫暖/湧升流區</div>
+          </div>
+          <div>💡 點擊標記即可切換至該企鵝的詳細生態資料</div>
+        </div>
+      </div>
+
+      <!-- 企鵝詳細資訊面板 (Info Panel) -->
+      <article class="detail-card" id="detailCard" aria-label="企鵝詳細生態介紹">
+        <div class="card-header-bar">
+          <div class="card-title">
+            <span id="headerSpeciesName">帝王企鵝</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:normal;">生態檔案與參考照片</span>
+          </div>
+          <div class="card-iucn-pill" id="detailIucnBadge">近危 (NT)</div>
+        </div>
+
+        <div class="detail-body">
+          <!-- 標題與學名 -->
+          <div class="detail-header-row">
+            <div class="species-titles">
+              <h2 id="speciesNameZh">帝王企鵝</h2>
+              <div class="names-sub">
+                <span id="speciesNameEn">Emperor Penguin</span> · 
+                <span class="scientific-name" id="speciesScientific">Aptenodytes forsteri</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 照片展示區 (支援點擊放大與參考照片標註) -->
+          <div class="detail-photo-wrapper" id="detailPhotoTrigger" title="點擊檢視高解析大圖與生物鑑別說明">
+            <img id="detailImg" class="detail-img" src="" alt="企鵝參考相片" />
+            
+            <div class="ref-badge-top">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              <span>參考照片 · 認證野生特徵</span>
+            </div>
+
+            <!-- 照片特徵標註圖層 -->
+            <div class="photo-annotations-layer" id="photoAnnotationsLayer"></div>
+
+            <div class="zoom-hint-badge">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                <line x1="11" y1="8" x2="11" y2="14"/>
+                <line x1="8" y1="11" x2="14" y2="11"/>
+              </svg>
+              點擊查看大圖與特徵說明
+            </div>
+          </div>
+
+          <!-- 參考相片專屬功能列 -->
+          <div class="ref-photo-action-bar">
+            <div class="ref-action-btns">
+              <button class="ref-tool-btn" id="btnInspectPhoto" title="開啟全螢幕高解析大圖燈箱">
+                🔍 查看大圖
+              </button>
+              <button class="ref-tool-btn" id="btnTogglePhotoTraits" title="在相片上切換形態特徵標註標記">
+                🔬 標註特徵
+              </button>
+              <button class="ref-tool-btn" id="btnCompareLookalike" title="切換至相似種相片比對模式">
+                ⚖️ 相似種比對
+              </button>
+            </div>
+            <span class="photo-credit-text" id="photoCreditBrief">來源：Wikimedia Commons</span>
+          </div>
+
+          <!-- 生物辨識特徵標籤欄 (Diagnostic Identification Traits) -->
+          <div class="diagnostic-traits-bar">
+            <div class="diagnostic-title">
+              <span>🔬 關鍵鑑定特徵：</span>
+            </div>
+            <div id="detailDiagnosticTraits" style="display:flex; flex-wrap:wrap; gap:0.4rem;"></div>
+          </div>
+
+          <!-- 棲地標籤群 -->
+          <div class="habitat-tags-row" id="detailHabitats"></div>
+
+          <!-- 科普核心簡介 (2~3 句精華) -->
+          <div class="summary-section" id="detailSummary"></div>
+
+          <!-- 核心生態數值指標卡 -->
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <span class="metric-label">體型與體重</span>
+              <span class="metric-val" id="metricSize">約 115-130 cm / 22-45 kg</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-label">游泳時速</span>
+              <span class="metric-val" id="metricSpeed">時速約 6-9 km/h (衝刺達 15 km/h)</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-label">主要飲食</span>
+              <span class="metric-val" id="metricDiet">南極磷蝦、魷魚及多種魚類</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-label">棲息環境</span>
+              <span class="metric-val" id="metricHabitatType">極地冰海原</span>
+            </div>
+          </div>
+
+          <!-- 企鵝冷知識 (Fun Fact) -->
+          <div class="fun-fact-box">
+            <div class="fun-fact-icon">💡</div>
+            <div class="fun-fact-content">
+              <h4>企鵝冷知識 (Fun Fact)</h4>
+              <p id="detailFunFact"></p>
+            </div>
+          </div>
+
+          <!-- 代表性分布地點與經緯度 -->
+          <div class="geo-location-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <div>
+              <strong id="detailRegionTitle">代表棲地：</strong>
+              <span id="detailRegionText">南極洲沿岸冰原</span>
+              <span id="detailCoordsText" style="color:var(--text-light); margin-left:0.35rem;">(-75.0°S, 0.0°E)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 面板切換導覽頁尾 -->
+        <div class="detail-nav-footer">
+          <button class="nav-arrow-btn" id="prevPenguinBtn" title="上一個企鵝">
+            ← 上一種
+          </button>
+          <button class="btn-focus-map" id="focusMapBtn" title="在地圖上閃爍標記">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="2" x2="12" y2="6"/>
+              <line x1="12" y1="18" x2="12" y2="22"/>
+              <line x1="2" y1="12" x2="6" y2="12"/>
+              <line x1="18" y1="12" x2="22" y2="12"/>
+            </svg>
+            在地圖定位
+          </button>
+          <button class="nav-arrow-btn" id="nextPenguinBtn" title="下一個企鵝">
+            下一種 →
+          </button>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- 企鵝種類圖鑑專區 (Species Gallery & Modes) -->
+    <section class="gallery-section" aria-label="企鵝種類圖鑑與參考相片">
+      <div class="gallery-header">
+        <div class="gallery-title-wrap">
+          <h3>
+            <span>📚 全球現存企鵝物種探索圖鑑</span>
+          </h3>
+          <p>共收錄全球現存全部 18 種企鵝物種 · 支援圖鑑檔案卡、生態大圖相片牆、特徵對照表與相似種相片比對</p>
+        </div>
+        
+        <!-- 顯示模式切換鈕 -->
+        <div class="view-mode-bar">
+          <button class="view-toggle-btn active" id="modeCardBtn">
+            🗂️ 圖鑑檔案
+          </button>
+          <button class="view-toggle-btn" id="modePhotoBtn">
+            🖼️ 參考大圖牆
+          </button>
+          <button class="view-toggle-btn" id="modeCompareBtn">
+            🔬 特徵對照表
+          </button>
+          <button class="view-toggle-btn" id="modeSideBySideBtn">
+            ⚖️ 相似種相片比對
+          </button>
+          <div class="gallery-count-badge" id="galleryCountBadge">
+            顯示中：18 / 18 種
+          </div>
+        </div>
+      </div>
+
+      <!-- 圖鑑卡片容器 (Card & Photo Mode) -->
+      <div class="gallery-grid" id="galleryGrid"></div>
+
+      <!-- 生態特徵比對表容器 (Comparison Table Mode) -->
+      <div class="comparison-container" id="comparisonContainer">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>參考相片</th>
+              <th>中文名稱</th>
+              <th>英文與學名</th>
+              <th>IUCN 狀態</th>
+              <th>棲息環境</th>
+              <th>頭部與羽冠關鍵辨識特徵</th>
+              <th>體型/體重</th>
+              <th>代表生活海域</th>
+            </tr>
+          </thead>
+          <tbody id="comparisonTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- 相似種相片比對容器 (Side-by-side Photo Comparison Mode) -->
+      <div class="sidebyside-container" id="sideBySideContainer">
+        <div class="sidebyside-header">
+          <div class="sidebyside-intro">
+            <h4>⚖️ 相似物種野生參考照片對比與鑑別指南</h4>
+            <div class="presets-row">
+              <span class="preset-label">經典對照組：</span>
+              <button class="preset-btn" data-pair="emperor:king">👑 帝王 vs 國王</button>
+              <button class="preset-btn" data-pair="adelie:chinstrap">🐧 阿德利 vs 帽帶</button>
+              <button class="preset-btn" data-pair="rockhopper:northern_rockhopper">🪨 南跳岩 vs 北跳岩</button>
+              <button class="preset-btn" data-pair="macaroni:royal">👑 馬可羅尼 vs 皇家</button>
+              <button class="preset-btn" data-pair="humboldt:magellanic">🌊 漢波德 vs 麥哲倫</button>
+              <button class="preset-btn" data-pair="fiordland:snares">🌿 峽灣 vs 史納爾島</button>
+            </div>
+          </div>
+          
+          <div class="compare-selectors-row">
+            <div class="compare-select-wrap">
+              <label for="compareSelectA">物種 A：</label>
+              <select id="compareSelectA" class="compare-dropdown"></select>
+            </div>
+            <div class="compare-vs-badge">VS</div>
+            <div class="compare-select-wrap">
+              <label for="compareSelectB">物種 B：</label>
+              <select id="compareSelectB" class="compare-dropdown"></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebyside-cards-grid" id="sideBySideCardsGrid"></div>
+      </div>
+
+      <!-- 查無結果提示 (Empty State) -->
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">🔍</div>
+        <h4>找不到符合條件的企鵝</h4>
+        <p>請嘗試輸入其他關鍵字，或是更換棲息環境篩選條件。</p>
+        <button class="btn-reset-filters" id="emptyResetBtn">清除搜尋與篩選</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 圖片放大視窗 (Lightbox Modal - 強化縮放、特徵標記與底端膠卷列) -->
+  <div class="modal-overlay" id="imageModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-titles">
+          <h3 id="modalTitle">帝王企鵝 (Emperor Penguin)</h3>
+          <p id="modalSub">Aptenodytes forsteri</p>
+        </div>
+        
+        <div class="modal-header-actions">
+          <!-- 縮放與特徵工具 -->
+          <div class="modal-zoom-bar">
+            <button class="btn-zoom" id="btnZoomOut" title="縮小相片 (鍵盤 -)">🔍 -</button>
+            <button class="btn-zoom" id="btnZoom100" title="100% 原始大小">100%</button>
+            <button class="btn-zoom" id="btnZoomIn" title="放大相片 (鍵盤 +)">🔍 +</button>
+            <button class="btn-zoom" id="btnZoomReset" title="重設比例 (鍵盤 0)">⟲</button>
+          </div>
+          <button class="modal-close-btn" id="modalCloseBtn" aria-label="關閉視窗">✕</button>
+        </div>
+      </div>
+
+      <div class="modal-image-wrap" id="modalImageWrap">
+        <img id="modalImg" class="modal-img" src="" alt="放大檢視相片" />
+        <button class="modal-nav-prev" id="modalPrevBtn" title="上一種企鵝 (鍵盤 ←)">‹</button>
+        <button class="modal-nav-next" id="modalNextBtn" title="下一種企鵝 (鍵盤 →)">›</button>
+      </div>
+
+      <!-- 燈箱底端 18 種企鵝縮圖膠卷 -->
+      <div class="modal-filmstrip-wrap" id="modalFilmstrip"></div>
+
+      <div class="modal-footer">
+        <div class="modal-diagnostic-info">
+          <strong>🔬 生物形態鑑別標記：</strong>
+          <span id="modalDiagnostic"></span>
+        </div>
+        <div class="modal-credit" id="modalCredit">相片來源：Wikimedia Commons</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 頁尾 -->
+  <footer class="site-footer">
+    <p><strong>Penguin Atlas｜企鵝探索地圖</strong> · 全球現存全部 18 種企鵝生態科學資料庫</p>
+    <p>資料參照國際鳥盟（BirdLife International）、世界自然保護聯盟（IUCN 紅皮書）與國際企鵝學會。照片皆經由專業野外攝影與生物特徵檢核。</p>
+  </footer>
+
+  <!-- ==========================================================================
+       原生 JavaScript 邏輯：完整 18 種企鵝物種資料庫、零跳動地圖與參考圖片顯示
+       ========================================================================== -->
+  <script>
+    /**
+     * 全球現存全部 18 種企鵝物種完整科普資料庫
+     * 涵蓋極地、亞極地、溫帶與赤道湧升流海域，每種皆具備生物鑑別特徵與真實野生生態相片
+     */
+    const PENGUIN_DATA = [
+      {
+        id: "emperor",
+        nameZh: "帝王企鵝",
+        nameEn: "Emperor Penguin",
+        scientificName: "Aptenodytes forsteri",
+        habitats: ["極地", "海冰", "海岸"],
+        habitatType: "極地",
+        iucn: "近危 (NT)",
+        iucnClass: "iucn-nt",
+        regions: "南極大陸周圍海冰原與威德爾海、羅斯海沿岸",
+        locationLabel: "南極洲威德爾海冰原群落",
+        latitude: -75.0,
+        longitude: 0.0,
+        mapX: 470,
+        mapY: 545,
+        size: "約 115-130 cm / 22-45 kg",
+        speed: "巡游 6-9 km/h (衝刺可達 15 km/h)",
+        diet: "南極磷蝦、魷魚及南極側紋銀魚",
+        summary: "現存體型最大、最重的企鵝物種，也是唯一在南極嚴冬期間進行繁殖的企鵝。雄鳥會在零下數十度的永夜暴風雪中，以雙腳與育兒袋連續孵蛋超過兩個月，期間完全禁食，仰賴群體抱團取暖共度酷寒。",
+        funFact: "在極地暴風雪中，雄性帝王企鵝會聚集數千隻形成「企鵝保暖團（Huddle）」，核心溫度可達 35°C 以上，大家會以極其微小的步伐輪流從寒冷的外緣往溫暖的中央移動！",
+        diagnosticTraits: ["耳後金黃漸層斑塊", "前胸淡黃羽色", "體型冠絕所有企鵝", "下嘴板有粉紅縱紋"],
+        annotations: [
+          { label: "金黃耳斑", x: 42, y: 25, desc: "耳後具有鮮明金黃羽毛，向下漸層融入淺黃前胸" },
+          { label: "下嘴板粉紫縱紋", x: 34, y: 32, desc: "修長嘴喙下半部帶有獨特的粉紫或淡橘色細長條紋" },
+          { label: "極地保暖羽絨層", x: 55, y: 55, desc: "每平方公分超過百根微小羽毛，足以抵禦 -60°C 暴風雪" }
+        ],
+        comparePair: "king",
+        image: "images/penguins/emperor.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Emperor_penguins.jpg&w=900",
+        imageCredit: "Wikimedia Commons / National Science Foundation / Michael Van Woert (Public Domain)"
+      },
+      {
+        id: "adelie",
+        nameZh: "阿德利企鵝",
+        nameEn: "Adélie Penguin",
+        scientificName: "Pygoscelis adeliae",
+        habitats: ["極地", "海岸", "海冰"],
+        habitatType: "極地",
+        iucn: "無危 (LC)",
+        iucnClass: "iucn-lc",
+        regions: "南極大陸全島海岸線及鄰近島嶼",
+        locationLabel: "南極半島及羅斯島海岸",
+        latitude: -64.8,
+        longitude: -63.5,
+        mapX: 295,
+        mapY: 520,
+        size: "約 70 cm / 3.8-5.8 kg",
+        speed: "時速約 8 km/h (跳躍出水面換氣)",
+        diet: "南極磷蝦、側紋銀魚及小型端足類",
+        summary: "擁有標誌性的白色眼圈與黑白相間燕尾服羽色，是除了帝王企鵝外真正長年定居於南極本土的物種。春天來臨時會在無冰的岩岸建立數以萬計的繁衍群落，利用收集來的小石子築起高巢以防融雪淹沒蛋卵。",
+        funFact: "築巢用的鵝卵石是阿德利企鵝最珍貴的財產！牠們常趁鄰居轉身出海時偷偷銜走對方的石頭，甚至會因此大打出手，常被生態學家戲稱為「極地神偷」。",
+        diagnosticTraits: ["標誌性純白眼圈", "純黑頭部羽毛", "黑白分明燕尾服", "羽毛延伸覆蓋嘴喙一半"],
+        annotations: [
+          { label: "純白眼圈", x: 48, y: 26, desc: "黑臉龐中醒目的白眼圈是其最標誌性鑑別特徵" },
+          { label: "被羽覆蓋的嘴基", x: 41, y: 32, desc: "羽毛延伸至黑色嘴喙的中段以保暖" }
+        ],
+        comparePair: "chinstrap",
+        image: "images/penguins/adelie.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Pygoscelis_adeliae.jpg&w=900",
+        imageCredit: "Wikimedia Commons / polar-conservation.org (CC-BY-SA 3.0)"
+      },
+      {
+        id: "king",
+        nameZh: "國王企鵝",
+        nameEn: "King Penguin",
+        scientificName: "Aptenodytes patagonicus",
+        habitats: ["亞極地", "海岸", "溫帶海域"],
+        habitatType: "亞極地",
+        iucn: "無危 (LC)",
+        iucnClass: "iucn-lc",
+        regions: "亞南極群島（南喬治亞島、福克蘭群島、克革倫群島等）",
+        locationLabel: "南喬治亞島索爾茲伯里平原",
+        latitude: -54.0,
+        longitude: -37.0,
+        mapX: 395,
+        mapY: 508,
+        size: "約 85-95 cm / 11-16 kg",
+        speed: "時速約 6-10 km/h",
+        diet: "燈籠魚等發光深海魚類及烏賊",
+        summary: "企鵝家族中體型第二大，外型與帝王企鵝相似但身形更加纖長優雅。耳後有著鮮豔濃郁的亮橘色滴狀封閉斑塊，胸前飾有如太陽初升般的橘黃漸層羽毛，繁殖週期長達 14 至 16 個月。",
+        funFact: "國王企鵝的幼鳥全身覆蓋著濃密蓬鬆的深褐色厚絨毛，看起來像一隻毛茸茸的奇異果！早期的歐洲探險家甚至曾誤以為幼鳥是完全不同種類的「毛企鵝（Woolly Penguin）」。",
+        diagnosticTraits: ["淚滴狀封閉鮮亮橘斑", "胸前濃艷橘黃漸層", "身型優雅纖長", "下嘴板有明亮橘色斑條"],
+        annotations: [
+          { label: "封閉淚滴橘耳斑", x: 46, y: 24, desc: "與帝王企鵝不同，耳斑邊緣清晰且呈鮮艷淚滴狀" },
+          { label: "亮橙色下嘴板", x: 38, y: 32, desc: "下嘴板兩側具有極為鮮明的橙紅或亮橘色斑" }
+        ],
+        comparePair: "emperor",
+        image: "images/penguins/king.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/King_penguin_Aptenodytes_patagonicus-4932.jpg&w=900",
+        imageCredit: "Wikimedia Commons / Ben Tubby (CC-BY 2.0)"
+      },
+      {
+        id: "gentoo",
+        nameZh: "巴布亞企鵝",
+        nameEn: "Gentoo Penguin",
+        scientificName: "Pygoscelis papua",
+        habitats: ["亞極地", "極地", "海岸"],
+        habitatType: "亞極地",
+        iucn: "無危 (LC)",
+        iucnClass: "iucn-lc",
+        regions: "福克蘭群島、南喬治亞島及南極半島沿海",
+        locationLabel: "福克蘭群島布萊斯島沙灘",
+        latitude: -51.7,
+        longitude: -59.5,
+        mapX: 350,
+        mapY: 485,
+        size: "約 75-90 cm / 4.5-8.5 kg",
+        speed: "時速高達 36 km/h（全鳥類游泳冠軍）",
+        diet: "磷蝦、小型海魚及烏賊",
+        summary: "雙眼上方有一道如純白頭巾般的白色寬帶橫跨頭頂，又稱「紳士企鵝」或「白眉企鵝」。擁有醒目的鮮橘紅色嘴喙與粉紅色的腳蹼，是全地球在水中游泳衝刺速度最快的鳥類紀錄保持者！",
+        funFact: "巴布亞企鵝在求偶時，雄鳥會精挑細選一顆最圓潤、光滑無瑕的白色鵝卵石銜到雌鳥腳邊。如果雌鳥接納了這顆石頭，就代表求婚成功，牠們將共同用這顆石頭築巢！",
+        diagnosticTraits: ["雙眼上方連貫白頭巾帶", "鮮艷亮橘紅嘴喙", "粉紅色腳蹼", "長而挺立的尾羽"],
+        annotations: [
+          { label: "白頭巾羽斑", x: 50, y: 22, desc: "橫跨頭頂連接雙眼的白色斑塊如精緻頭巾" },
+          { label: "亮橘紅嘴喙", x: 38, y: 30, desc: "鮮艷亮麗的紅色嘴喙在冰天雪地中極為奪目" }
+        ],
+        comparePair: "adelie",
+        image: "images/penguins/gentoo.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Gentoo_Penguin._(8671680772).jpg&w=900",
+        imageCredit: "Wikimedia Commons / Liam Quinn (CC-BY-SA 2.0)"
+      },
+      {
+        id: "african",
+        nameZh: "非洲企鵝",
+        nameEn: "African Penguin",
+        scientificName: "Spheniscus demersus",
+        habitats: ["較溫暖地區", "海岸", "溫帶海域"],
+        habitatType: "較溫暖地區",
+        iucn: "瀕危 (EN)",
+        iucnClass: "iucn-en",
+        regions: "納米比亞與南非西南海岸及周邊島嶼",
+        locationLabel: "南非開普敦巨石海灘 (Boulders Beach)",
+        latitude: -34.2,
+        longitude: 18.5,
+        mapX: 552,
+        mapY: 432,
+        size: "約 60-70 cm / 2.2-3.5 kg",
+        speed: "時速約 7 km/h (衝刺可達 20 km/h)",
+        diet: "沙丁魚、鯷魚及小型烏賊",
+        summary: "非洲大陸唯一的本土企鵝，雙眼上方具有醒目的粉紅色無羽裸露腺體。叫聲洪亮粗獷如驢鳴，故又有「驢鳴企鵝」或「黑腳企鵝」之稱。胸前的黑色斑點排列如人類指紋般獨一無二。",
+        funFact: "非洲企鵝眼睛上方的粉紅色皮膚其實是天然散熱器！當周圍氣溫升高時，體內的血液會大量流經此處，藉由海風快速帶走體熱，此時眼斑顏色還會變得更加鮮紅！",
+        diagnosticTraits: ["眼部上方粉紅色裸皮", "胸部細窄單條黑帶", "胸前不規則黑斑紋(獨一無二)", "全黑腳蹼"],
+        annotations: [
+          { label: "散熱粉紅腺體", x: 45, y: 28, desc: "眼睛上方的粉紅裸皮可調節高溫氣候下的體溫" },
+          { label: "單黑胸帶與斑點", x: 50, y: 55, desc: "胸前的黑斑如同指紋，每隻企鵝皆不相同" }
+        ],
+        comparePair: "magellanic",
+        image: "images/penguins/african.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Spheniscus_demersus.jpg&w=900",
+        imageCredit: "Wikimedia Commons / Raul654 (CC-BY-SA 3.0)"
+      },
+      {
+        id: "humboldt",
+        nameZh: "漢波德企鵝",
+        nameEn: "Humboldt Penguin",
+        scientificName: "Spheniscus humboldti",
+        habitats: ["較溫暖地區", "海岸", "溫帶海域"],
+        habitatType: "較溫暖地區",
+        iucn: "易危 (VU)",
+        iucnClass: "iucn-vu",
+        regions: "南美洲秘魯與智利沿岸（秘魯涼流湧升流區）",
+        locationLabel: "智利巴爾帕萊索海岸保護區",
+        latitude: -23.5,
+        longitude: -70.4,
+        mapX: 275,
+        mapY: 330,
+        size: "約 65-70 cm / 3.6-5.9 kg",
+        speed: "時速約 8 km/h",
+        diet: "鯷魚、沙丁魚、玉筋魚及烏賊",
+        summary: "以著名地理學家漢波德及貫穿其棲地的寒流命名。嘴基至眼部周圍裸露出一大片肉粉色皮膚，胸前有一道連貫的粗大倒 U 型黑帶。生活在氣候乾燥炎熱的南美太平洋沿岸，藉冰涼湧升流覓食。",
+        funFact: "牠們傳統上會在海鳥沉積了數百年的天然「鳥糞石層（Guano）」中挖掘深洞築巢以避開沙漠烈日。然而過去百年人類為了提煉化肥大量開採鳥糞石，曾對其繁衍造成嚴重衝擊！",
+        diagnosticTraits: ["嘴基大面積粉肉色裸皮", "單條粗黑倒U型胸帶", "臉部寬闊白條紋", "黑色眼周"],
+        annotations: [
+          { label: "嘴基大片粉紅裸皮", x: 40, y: 32, desc: "比麥哲倫企鵝更寬廣的肉粉色裸露皮膚" },
+          { label: "倒 U 型粗黑胸帶", x: 52, y: 56, desc: "胸前單條粗厚的黑帶環繞腹部兩側" }
+        ],
+        comparePair: "magellanic",
+        image: "images/penguins/humboldt.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Spheniscus_humboldti_20070116.jpg&w=900",
+        imageCredit: "Wikimedia Commons / Christian Mehlführer (CC-BY 2.5)"
+      },
+      {
+        id: "magellanic",
+        nameZh: "麥哲倫企鵝",
+        nameEn: "Magellanic Penguin",
+        scientificName: "Spheniscus magellanicus",
+        habitats: ["溫帶", "亞極地", "海岸"],
+        habitatType: "溫帶",
+        iucn: "無危 (LC)",
+        iucnClass: "iucn-lc",
+        regions: "阿根廷、智利南部巴塔哥尼亞海岸及福克蘭群島",
+        locationLabel: "阿根廷巴爾德斯半島 (Península Valdés)",
+        latitude: -42.5,
+        longitude: -64.0,
+        mapX: 308,
+        mapY: 442,
+        size: "約 61-76 cm / 2.7-6.5 kg",
+        speed: "時速約 7-9 km/h",
+        diet: "鳳尾魚、沙丁魚、端足類及磷蝦",
+        summary: "1520 年葡萄牙探險家麥哲倫船隊航行至南美洲時所記錄。其胸前最大特徵是具有「兩道醒目的黑色胸帶（雙環）」：一條在喉下如項圈，另一條在下胸部呈寬倒 U 型，羽毛覆蓋度高於漢波德企鵝。",
+        funFact: "麥哲倫企鵝是企鵝界的「忠貞模範」！許多配偶每年春天都會橫越數千公里浩瀚海域，準確回到去年同一個地下泥洞中相聚，有的伴侶甚至能攜手相伴長達 16 年之久！",
+        diagnosticTraits: ["雙道黑色胸帶(雙環)", "嘴部裸皮較漢波德企鵝少", "眉上環狀白色寬紋", "深褐至黑色虹膜"],
+        annotations: [
+          { label: "雙黑色胸帶 (雙胸環)", x: 50, y: 52, desc: "上頸一道與胸前一道，形成雙條黑色環帶" },
+          { label: "羽毛覆蓋的面頰", x: 44, y: 28, desc: "嘴基的裸皮遠少於漢波德企鵝" }
+        ],
+        comparePair: "humboldt",
+        image: "images/penguins/magellanic.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Magellanic_Penguin_(Spheniscus_magellanicus)_-adult.jpg&w=900",
+        imageCredit: "Wikimedia Commons / Christopher Stephens (CC-BY-SA 4.0)"
+      },
+      {
+        id: "little",
+        nameZh: "小藍企鵝",
+        nameEn: "Little Penguin",
+        scientificName: "Eudyptula minor",
+        habitats: ["溫帶", "海岸", "較溫暖地區"],
+        habitatType: "溫帶",
+        iucn: "無危 (LC)",
+        iucnClass: "iucn-lc",
+        regions: "澳洲南部（菲利普島）、塔斯馬尼亞及紐西蘭全境",
+        locationLabel: "澳洲墨爾本菲利普島保護區",
+        latitude: -38.5,
+        longitude: 145.2,
+        mapX: 865,
+        mapY: 442,
+        size: "約 33-40 cm / 約 1-1.5 kg（全世界最小企鵝）",
+        speed: "時速約 6 km/h",
+        diet: "小型沙丁魚、鳳尾魚、幼烏賊及磷蝦",
+        summary: "全世界體型最嬌小的小精靈企鵝，身高僅約 35 公分，背部羽毛散發出獨特的金屬深藍色光澤，又名「神仙企鵝」。習慣拂曉前成群出海捕魚，黃昏暮色降臨時才整隊踏上沙灘搖搖晃晃回巢避開猛禽捕食。",
+        funFact: "在澳洲墨爾本的菲利普島，每天黃昏都能目睹著名的「企鵝歸巢大遊行（Penguin Parade）」，數百隻小企鵝在浪潮拍岸聲中整隊衝刺回岸上灌木叢巢穴，萌翻全球旅人！",
+        diagnosticTraits: ["金屬深青藍色背羽", "全企鵝中體型最嬌小", "無胸帶或冠羽", "黃昏結隊集體歸巢"],
+        annotations: [
+          { label: "金屬亮藍背羽", x: 55, y: 45, desc: "羽毛呈現深靛青藍光澤，無任何黑色胸帶" },
+          { label: "嬌小嬌憨身形", x: 45, y: 65, desc: "成鳥體重僅 1 公斤左右，是全球最小企鵝" }
+        ],
+        comparePair: "galapagos",
+        image: "images/penguins/little.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Little_penguin_Eudyptula_minor.jpg&w=900",
+        imageCredit: "Wikimedia Commons / JJ Harrison (CC-BY-SA 3.0)"
+      },
+      {
+        id: "galapagos",
+        nameZh: "加拉巴哥企鵝",
+        nameEn: "Galápagos Penguin",
+        scientificName: "Spheniscus mendiculus",
+        habitats: ["較溫暖地區", "赤道海洋", "海岸"],
+        habitatType: "較溫暖地區",
+        iucn: "瀕危 (EN)",
+        iucnClass: "iucn-en",
+        regions: "加拉巴哥群島（厄瓜多）費爾南迪納島與伊莎貝拉島",
+        locationLabel: "加拉巴哥群島伊莎貝拉島火山海岸",
+        latitude: -0.4,
+        longitude: -91.4,
+        mapX: 246,
+        mapY: 262,
+        size: "約 48-53 cm / 1.7-2.6 kg",
+        speed: "時速約 7 km/h",
+        diet: "鯔魚、沙丁魚等小型群游海魚",
+        summary: "世界上唯一生活在赤道、甚至偶爾跨足北半球的野生企鵝！牠們依靠冷涼的克倫威爾深海湧升流帶來的冷水在此繁衍生息，體型偏小利於在高溫赤道環境下迅速散發體熱。",
+        funFact: "當赤道陽光炙熱時，加拉巴哥企鵝會張開翅膀陰影處散熱，並像小狗一樣張口喘氣來降溫，甚至整天泡在清涼的湧升流海水中避暑！",
+        diagnosticTraits: ["唯一生活在赤道的企鵝", "環翼企鵝屬中體型最小", "下巴黑色、白色條紋極細", "火山黑色玄武岩棲地"],
+        annotations: [
+          { label: "赤道耐熱短羽", x: 45, y: 35, desc: "羽毛較稀薄且體型小，以利赤道散熱" },
+          { label: "細白臉部紋路", x: 42, y: 25, desc: "眼後下行的白線極為纖細" }
+        ],
+        comparePair: "african",
+        image: "images/penguins/galapagos.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Galapagos_penguin_(Spheniscus_mendiculus).jpg&w=900",
+        imageCredit: "Wikimedia Commons / putneymark (CC-BY-SA 2.0)"
+      },
+      {
+        id: "rockhopper",
+        nameZh: "南跳岩企鵝",
+        nameEn: "Southern Rockhopper Penguin",
+        scientificName: "Eudyptes chrysocome",
+        habitats: ["亞極地", "海岸", "岩岸懸崖"],
+        habitatType: "亞極地",
+        iucn: "易危 (VU)",
+        iucnClass: "iucn-vu",
+        regions: "南美洲南部、福克蘭群島與南印度洋群島",
+        locationLabel: "福克蘭群島陡峭岩石懸崖",
+        latitude: -51.5,
+        longitude: -60.2,
+        mapX: 330,
+        mapY: 472,
+        size: "約 45-58 cm / 2-3.4 kg",
+        speed: "時速約 7-8 km/h",
+        diet: "磷蝦、小蝦、烏賊與小型魚類",
+        summary: "雙眼上方擁有鮮明張揚的金黃色長羽冠與血紅色的雙眼，性格極其堅毅勇猛。與其他腹部著地滑行或緩步漫步的企鵝不同，牠們最擅長雙腳併攏、在陡峭嶙峋的懸崖岩石間敏捷跳躍攀爬。",
+        funFact: "面對巨浪拍打的十公尺懸崖岩壁，跳岩企鵝能憑藉尖銳的趾爪與驚人的彈跳力直接從洶湧浪濤中一躍而上岩層，因此獲得「岩石跳躍者 (Rockhopper)」之名！",
+        diagnosticTraits: ["細長放射狀金黃眉冠", "鮮明血紅色雙眸", "粗壯紅褐色短喙", "雙腳並攏跳躍前進"],
+        annotations: [
+          { label: "放射狀金黃眉羽", x: 44, y: 24, desc: "刺蝟般向上向兩側立起，不像北跳岩企鵝垂墜" },
+          { label: "紅寶石色雙眼", x: 47, y: 28, desc: "醒目的血紅色虹膜，極具威懾力" }
+        ],
+        comparePair: "northern_rockhopper",
+        image: "images/penguins/rockhopper.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Southern_Rockhopper_Penguin_(Eudyptes_chrysocome).jpg&w=900",
+        imageCredit: "Wikimedia Commons / Dr. Raju Kasambe (CC-BY-SA 3.0)"
+      },
+      {
+        id: "yellow_eyed",
+        nameZh: "黃眼企鵝",
+        nameEn: "Yellow-eyed Penguin",
+        scientificName: "Megadyptes antipodes",
+        habitats: ["溫帶", "亞極地", "海岸森林"],
+        habitatType: "溫帶",
+        iucn: "瀕危 (EN)",
+        iucnClass: "iucn-en",
+        regions: "紐西蘭南島東南部及奧克蘭群島、坎貝爾群島",
+        locationLabel: "紐西蘭奧塔哥半島 (Otago Peninsula)",
+        latitude: -45.8,
+        longitude: 170.7,
+        mapX: 958,
+        mapY: 465,
+        size: "約 62-79 cm / 5-8 kg",
+        speed: "時速約 8-11 km/h",
+        diet: "藍鱈魚、擬鰺、紅鱈與烏賊",
+        summary: "紐西蘭毛利語稱為「Hoiho」（喧鬧的聲音），有著淡黃色虹膜與環繞後腦勺的金黃色羽帶。與多數成千上萬群居的企鵝截然不同，黃眼企鵝極重隱私，喜歡在沿海灌木森林中單獨隱蔽築巢。",
+        funFact: "黃眼企鵝是全球最珍稀的企鵝之一，不僅被印在紐西蘭 5 元紙幣上，牠們彼此還保持「社交距離」，兩座巢穴往往相距數十公尺互不相見！",
+        diagnosticTraits: ["淡黃色虹膜雙眼", "環繞腦後的亮黃色羽環", "無黑色胸帶", "偏好沿海林木灌叢單獨築巢"],
+        annotations: [
+          { label: "環狀亮黃羽帶", x: 48, y: 22, desc: "從雙眼延伸至後腦勺的鮮黃色頭環" },
+          { label: "淡檸檬黃虹膜", x: 42, y: 26, desc: "淡黃色的雙眼如明珠，是其命名由來" }
+        ],
+        comparePair: "fiordland",
+        image: "images/penguins/yellow_eyed.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Yellow-eyed_Penguin.jpg&w=900",
+        imageCredit: "Wikimedia Commons / Department of Conservation NZ (CC-BY 2.0)"
+      },
+      {
+        id: "chinstrap",
+        nameZh: "帽帶企鵝",
+        nameEn: "Chinstrap Penguin",
+        scientificName: "Pygoscelis antarcticus",
+        habitats: ["極地", "亞極地", "海岸"],
+        habitatType: "極地",
+        iucn: "無危 (LC)",
+        iucnClass: "iucn-lc",
+        regions: "南極半島、南桑威奇群島、南設得蘭群島",
+        locationLabel: "南桑威奇群島札沃多夫斯基島",
+        latitude: -62.9,
+        longitude: -60.6,
+        mapX: 320,
+        mapY: 510,
+        size: "約 68-76 cm / 3-5 kg",
+        speed: "時速約 8-10 km/h",
+        diet: "南極磷蝦與小型魚類",
+        summary: "下巴有一道細黑的羽毛線條，就像戴著一頂精緻的安全帽或士兵鋼盔，又名「南極企鵝」。主要生活在南大洋嚴酷多暴風雪的冰雪島嶼與火山岩島，性格大膽好奇且叫聲高亢響亮。",
+        funFact: "科學家在 2023 年發表的研究發現，帽帶企鵝在孵蛋期間每天會微睡眠（Microsleep）超過 10,000 次！每次只有短短 4 秒鐘，藉此在嚴酷掠食者威脅下同時保持警覺與恢復體能！",
+        diagnosticTraits: ["頷下黑色扣帶狀細羽線", "純白無瑕的面頰", "黑色的頭頂如鋼盔", "紅褐色雙眼與黑喙"],
+        annotations: [
+          { label: "黑色鋼盔扣帶", x: 48, y: 38, desc: "下巴橫跨耳部的黑色細線如安全帽扣帶" },
+          { label: "純白潔淨面頰", x: 44, y: 30, desc: "面頰無任何雜色，純白亮眼" }
+        ],
+        comparePair: "adelie",
+        image: "images/penguins/chinstrap.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Chinstrap_Penguin.jpg&w=900",
+        imageCredit: "Wikimedia Commons / Jerzy Strzelecki (CC-BY-SA 3.0)"
+      },
+      {
+        id: "macaroni",
+        nameZh: "馬可羅尼企鵝",
+        nameEn: "Macaroni Penguin",
+        scientificName: "Eudyptes chrysolophus",
+        habitats: ["亞極地", "海岸", "極地"],
+        habitatType: "亞極地",
+        iucn: "易危 (VU)",
+        iucnClass: "iucn-vu",
+        regions: "亞南極群島（南喬治亞島、克革倫群島、赫德島）與南極半島周邊",
+        locationLabel: "南喬治亞島陡峭岩坡",
+        latitude: -54.0,
+        longitude: -38.0,
+        mapX: 425,
+        mapY: 492,
+        size: "約 68-71 cm / 4.5-6.5 kg",
+        speed: "時速約 8-10 km/h",
+        diet: "南極磷蝦（佔85%以上）、烏賊與深海魚類",
+        summary: "頭頂兩側向前額匯聚一束壯麗奪目的橙黃色羽冠，宛如戴著華麗的金黃羽毛面具。擁有龐大厚實的球莖狀橙棕色嘴喙與全黑色的面龐，是全球族群數量最為龐大的企鵝種類之一。",
+        funFact: "18 世紀的英國水手看到牠們頭頂那叢高調奢華的金色冠毛，便聯想到當時倫敦穿著前衛浮誇、戴著誇張假髮的紈絝貴族青年「Macaroni」，因而幽默地以此命名！",
+        diagnosticTraits: ["額前中央交匯的橙黃流蘇冠羽", "純黑色的面頰與下頜", "粗大厚重的紅棕色嘴喙", "嘴喙基部有微小粉紅裸皮"],
+        annotations: [
+          { label: "前額匯聚金色羽冠", x: 46, y: 22, desc: "橙黃色羽毛在前額中央相連，如金色皇冠" },
+          { label: "純黑面頰 (對比皇家企鵝)", x: 42, y: 35, desc: "面部全黑，是區分皇家企鵝最關鍵指標" }
+        ],
+        comparePair: "royal",
+        image: "images/penguins/macaroni.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Macaroni_penguin.jpg&w=900",
+        imageCredit: "Wikimedia Commons / Ben Tubby (CC-BY 2.0)"
+      },
+      {
+        id: "fiordland",
+        nameZh: "峽灣企鵝",
+        nameEn: "Fiordland Penguin",
+        scientificName: "Eudyptes pachyrhynchus",
+        habitats: ["溫帶", "海岸森林", "海岸"],
+        habitatType: "溫帶",
+        iucn: "易危 (VU)",
+        iucnClass: "iucn-vu",
+        regions: "紐西蘭南島西南部的峽灣地區與斯圖爾特島",
+        locationLabel: "紐西蘭南島峽灣國家公園海岸森林",
+        latitude: -45.4,
+        longitude: 167.2,
+        mapX: 935,
+        mapY: 452,
+        size: "約 55-60 cm / 3.0-4.5 kg",
+        speed: "時速約 7-9 km/h",
+        diet: "小型烏賊、磷蝦及沿岸海魚",
+        summary: "極為罕見生活在溫帶雨林與巨木峽灣深處的企鵝。擁有亮黃色粗眉冠羽，黑色臉頰兩側具有 3 至 6 條如細白刷毛般的獨特白斑紋，常在長滿苔蘚的巨木樹根盤繞處或海蝕洞窟中產卵育幼。",
+        funFact: "紐西蘭毛利語稱其為「Tawaki」。牠們會在佈滿高大蕨類植物與巨樹的溫帶雨林地帶步行穿梭數百公尺尋找隱密的洞穴，是少數能在森林泥土間矯健攀爬的企鵝！",
+        diagnosticTraits: ["臉頰兩側有 3-6 條獨特細白紋", "厚實亮黃色眉狀冠羽", "面頰全黑底色", "深橙色厚實嘴喙"],
+        annotations: [
+          { label: "臉頰 3-6 條細白刷毛紋", x: 45, y: 34, desc: "黑色面頰上的細微白紋是其獨一無二的辨識特徵" },
+          { label: "濃密粗厚亮黃眉冠", x: 42, y: 23, desc: "粗廣醒目的眉羽向後延伸" }
+        ],
+        comparePair: "snares",
+        image: "images/penguins/fiordland.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Fiordland_Penguin.jpg&w=900",
+        imageCredit: "Wikimedia Commons / Mnolf (CC-BY-SA 3.0)"
+      },
+      {
+        id: "snares",
+        nameZh: "史納爾島企鵝",
+        nameEn: "Snares Penguin",
+        scientificName: "Eudyptes robustus",
+        habitats: ["溫帶", "亞極地", "海岸"],
+        habitatType: "溫帶",
+        iucn: "易危 (VU)",
+        iucnClass: "iucn-vu",
+        regions: "紐西蘭南端極小的史納爾斯群島（Snares Islands）",
+        locationLabel: "史納爾斯群島亞熱帶森林邊緣",
+        latitude: -48.0,
+        longitude: 166.6,
+        mapX: 940,
+        mapY: 484,
+        size: "約 50-70 cm / 2.5-4.0 kg",
+        speed: "時速約 8 km/h",
+        diet: "磷蝦、小型魷魚及魚類",
+        summary: "僅局限分布於紐西蘭南端面積僅約 3 平方公里的史納爾斯群島。頭頂有鮮明的亮黃色眉羽向後延伸，巨大粗厚的紅棕色嘴喙基部有一圈極為明顯的白色兼粉肉色無毛裸露皮膚邊緣。",
+        funFact: "全世界唯一的野生繁殖地就是史納爾斯群島，紐西蘭政府將該群島列為高度保護的自然禁區，禁止任何未經科學許可的遊客登島，只能乘坐科考船在海上遠遠觀察！",
+        diagnosticTraits: ["嘴喙基部有醒目的粉白裸皮環圈", "濃密鮮黃眉羽向後飄逸", "臉頰純黑無條紋", "體型比峽灣企鵝更壯實"],
+        annotations: [
+          { label: "嘴基粉白裸皮肉圈", x: 42, y: 34, desc: "嘴喙邊緣顯著的無毛裸露皮膚，比峽灣企鵝鮮明得多" },
+          { label: "純黑無斑紋臉頰", x: 48, y: 32, desc: "面頰光滑純黑，沒有峽灣企鵝的白刷毛" }
+        ],
+        comparePair: "fiordland",
+        image: "images/penguins/snares.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Snares_Penguin_(Eudyptes_robustus)_-group.jpg&w=900",
+        imageCredit: "Wikimedia Commons / Christopher Stephens (CC-BY 2.0)"
+      },
+      {
+        id: "erect_crested",
+        nameZh: "豎冠企鵝",
+        nameEn: "Erect-crested Penguin",
+        scientificName: "Eudyptes sclateri",
+        habitats: ["亞極地", "岩岸懸崖", "海岸"],
+        habitatType: "亞極地",
+        iucn: "瀕危 (EN)",
+        iucnClass: "iucn-en",
+        regions: "紐西蘭東南亞南極的邦蒂群島（Bounty Islands）與安提波德斯群島",
+        locationLabel: "邦蒂群島裸露岩石峭壁",
+        latitude: -47.7,
+        longitude: 179.0,
+        mapX: 980,
+        mapY: 485,
+        size: "約 65-70 cm / 3.5-6.0 kg",
+        speed: "時速約 8-10 km/h",
+        diet: "磷蝦及各類浮游甲殼類、烏賊",
+        summary: "擁有企鵝界獨一無二能筆直「向上豎立」如剛硬刷毛的亮黃色長冠羽，又稱「翹眉企鵝」。主要在人煙罕至、飽受南大洋滔天巨浪沖刷的險峻岩島峭壁上營巢繁殖，雙足具備驚人的岩壁吸附攀爬力。",
+        funFact: "豎冠企鵝在繁殖時產下兩枚卵，但第二枚卵通常比第一枚大很多（相差近一倍）。令人驚訝的是，親鳥會故意將第一枚較小的卵踢出巢外任其遺棄，只全力孵化較大的第二枚卵！",
+        diagnosticTraits: ["唯一能筆直向上豎立的鮮黃硬刷眉冠", "嘴喙細長紅棕帶微溝槽", "黑白羽毛分界極其清晰", "險峻裸露礁岩棲地"],
+        annotations: [
+          { label: "筆直豎立的硬刷眉冠", x: 44, y: 20, desc: "全企鵝唯一冠羽能朝天空垂直立起的獨門特徵" },
+          { label: "修長紅棕嘴喙", x: 38, y: 30, desc: "嘴喙修長且帶有微凹槽結構" }
+        ],
+        comparePair: "rockhopper",
+        image: "images/penguins/erect_crested.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Eudyptes_sclateri_129036290.jpg&w=900",
+        imageCredit: "Wikimedia Commons / Christopher Stephens (CC-BY-SA 4.0)"
+      },
+      {
+        id: "northern_rockhopper",
+        nameZh: "北跳岩企鵝",
+        nameEn: "Northern Rockhopper Penguin",
+        scientificName: "Eudyptes moseleyi",
+        habitats: ["溫帶", "亞極地", "海岸"],
+        habitatType: "溫帶",
+        iucn: "瀕危 (EN)",
+        iucnClass: "iucn-en",
+        regions: "南大西洋特里斯坦-達庫尼亞群島、戈夫島及南印度洋阿姆斯特丹島",
+        locationLabel: "南大西洋特里斯坦-達庫尼亞群島海岸",
+        latitude: -37.1,
+        longitude: -12.3,
+        mapX: 475,
+        mapY: 435,
+        size: "約 60-65 cm / 2.5-4.5 kg",
+        speed: "時速約 7-9 km/h",
+        diet: "磷蝦、烏賊、章魚及小型深海魚類",
+        summary: "與南跳岩企鵝相比，北跳岩企鵝擁有更長、更濃密且向後大幅垂墜如金色披巾般的極長流蘇羽冠。生活在南大西洋較溫暖的亞熱帶至溫帶海島懸崖與高大的莎草叢中，同樣以招牌雙足跳躍著稱。",
+        funFact: "超過 99% 的北跳岩企鵝族群都集中在南大西洋這幾個孤懸海中的群島上，由於過度捕撈、氣候變暖影響洋流以及歷史上海島鼠類侵擾，全球數量在近三十年內急劇下降，已被列為瀕危！",
+        diagnosticTraits: ["冠羽極其長且濃密垂墜如金色長髮", "紅寶石色虹膜", "棲息於溫帶莎草荒島", "體型略大於南跳岩企鵝"],
+        annotations: [
+          { label: "濃密垂墜金色披巾長冠", x: 44, y: 26, desc: "冠羽明顯比南跳岩企鵝長，垂落至後背兩側" },
+          { label: "溫帶莎草生活習性", x: 55, y: 65, desc: "生活在較溫暖的特里斯坦海島草坡" }
+        ],
+        comparePair: "rockhopper",
+        image: "images/penguins/northern_rockhopper.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Eudyptes_moseleyi_in_Edinburgh_Zoo.JPG&w=900",
+        imageCredit: "Wikimedia Commons / Edinburgh Zoo Conservation (CC-BY-SA 3.0)"
+      },
+      {
+        id: "royal",
+        nameZh: "皇家企鵝",
+        nameEn: "Royal Penguin",
+        scientificName: "Eudyptes schlegeli",
+        habitats: ["亞極地", "海岸", "海冰邊緣"],
+        habitatType: "亞極地",
+        iucn: "近危 (NT)",
+        iucnClass: "iucn-nt",
+        regions: "澳洲領地馬克夸利島（Macquarie Island）及周邊海域",
+        locationLabel: "馬克夸利島赫德灣龐大繁衍地",
+        latitude: -54.6,
+        longitude: 158.9,
+        mapX: 918,
+        mapY: 515,
+        size: "約 65-75 cm / 3.0-6.0 kg",
+        speed: "時速約 8-11 km/h",
+        diet: "磷蝦、烏賊及燈籠魚",
+        summary: "全球唯一僅在澳洲所屬的馬克夸利島繁衍的特有種企鵝。頭頂飾有耀眼奪目的橙黃色向後覆蓋羽冠，其最大特色是擁有「純白或極淺灰色的面頰與下巴」，與近親馬可羅尼企鵝的黑面孔形成強烈鮮明對比。",
+        funFact: "每年繁殖季節，數十萬隻皇家企鵝會自浩瀚南大洋游回這座長條狀的孤島，在沿海鵝卵石灘與草坡上密密麻麻聚集，形成南半球最令人嘆為觀止的海鳥繁衍大奇觀！",
+        diagnosticTraits: ["特徵性純白或淺灰面頰下巴", "頭頂燦爛橙黃長羽冠", "龐大紅棕色厚喙", "僅局限在馬克夸利島繁殖"],
+        annotations: [
+          { label: "純白或淡灰面孔", x: 44, y: 34, desc: "與近親馬可羅尼企鵝純黑臉部形成決定性區隔" },
+          { label: "燦爛向後橙黃羽冠", x: 46, y: 22, desc: "頭頂大面積鮮麗橙黃冠羽覆蓋腦後" }
+        ],
+        comparePair: "macaroni",
+        image: "images/penguins/royal.jpg",
+        fallbackUrl: "https://wsrv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/Royal_penguin_Macquarie_Island.jpg&w=900",
+        imageCredit: "Wikimedia Commons / Christopher Stephens (CC-BY-SA 4.0)"
+      }
+    ];
+
+    /**
+     * 應用程式全域狀態
+     */
+    let currentSelectedId = "emperor";
+    let activeFilter = "all";
+    let searchQuery = "";
+    let currentViewMode = "card"; // "card" | "photo" | "compare" | "sidebyside"
+    let isShowingAnnotations = false;
+    let modalZoomLevel = 1;
+    let isModalDragging = false;
+    let modalDragStart = { x: 0, y: 0 };
+    let modalTranslate = { x: 0, y: 0 };
+
+    // 當圖片載入失敗時的精美備援向量圖示
+    const FALLBACK_PENGUIN_SVG = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+        <rect width="400" height="300" fill="#0f2744"/>
+        <circle cx="200" cy="110" r="45" fill="#ffffff" opacity="0.9"/>
+        <ellipse cx="200" cy="190" rx="55" ry="75" fill="#ffffff" opacity="0.95"/>
+        <ellipse cx="200" cy="195" rx="38" ry="58" fill="#e2e8f0"/>
+        <polygon points="195,115 205,115 200,128" fill="#f59e0b"/>
+        <circle cx="185" cy="105" r="4" fill="#0f172a"/>
+        <circle cx="215" cy="105" r="4" fill="#0f172a"/>
+        <text x="200" y="278" font-family="sans-serif" font-size="13" fill="#94a3b8" text-anchor="middle">Penguin Atlas · 自然科普生態相片</text>
+      </svg>
+    `);
+
+    /**
+     * 根據環境類別取得標記色碼
+     */
+    function getHabitatColor(habitatType) {
+      switch (habitatType) {
+        case "極地": return "#38bdf8";      // 冰川青藍
+        case "亞極地": return "#2dd4bf";    // 蒼綠洋水
+        case "溫帶": return "#4ade80";      // 綠意溫帶
+        case "較溫暖地區": return "#fbbf24"; // 暖金
+        default: return "#38bdf8";
+      }
+    }
+
+    /**
+     * 智慧載入相片函式：本地快取優先 -> CDN 備援 -> 向量插圖
+     * 保證在任何環境下永遠不會破圖
+     */
+    function setupImageWithFallback(imgElement, penguin) {
+      const candidates = [
+        penguin.image,
+        `images/penguins/${penguin.id}.jpg`,
+        `public/images/penguins/${penguin.id}.jpg`,
+        penguin.fallbackUrl,
+        FALLBACK_PENGUIN_SVG
+      ];
+
+      let candidateIndex = 0;
+      function tryNextImage() {
+        candidateIndex++;
+        if (candidateIndex < candidates.length) {
+          imgElement.src = candidates[candidateIndex];
+        } else {
+          imgElement.src = FALLBACK_PENGUIN_SVG;
+          imgElement.onerror = null;
+        }
+      }
+
+      imgElement.onerror = tryNextImage;
+      imgElement.src = candidates[0];
+    }
+
+    /**
+     * 初始化函式
+     */
+    function init() {
+      initMapPins();
+      updateFilterCounts();
+      renderGallery();
+      renderComparisonTable();
+      initSideBySideDropdowns();
+      renderSideBySide();
+      updateDetailPanel(currentSelectedId);
+      renderModalFilmstrip();
+      bindEvents();
+    }
+
+    /**
+     * 初始化 SVG 地圖上的企鵝分布標記 (18 種物種點位，一次建立，絕不跳動)
+     */
+    function initMapPins() {
+      const pinsLayer = document.getElementById("mapPinsLayer");
+      pinsLayer.innerHTML = "";
+
+      PENGUIN_DATA.forEach(p => {
+        const color = getHabitatColor(p.habitatType);
+
+        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        g.setAttribute("class", `map-pin ${p.id === currentSelectedId ? 'active' : ''}`);
+        g.setAttribute("id", `pin-${p.id}`);
+        g.setAttribute("data-id", p.id);
+
+        g.innerHTML = `
+          <!-- 發光脈衝圈 (僅在 active 時顯示，固定在 (mapX, mapY)) -->
+          <circle cx="${p.mapX}" cy="${p.mapY}" r="14" fill="${color}" opacity="${p.id === currentSelectedId ? '0.45' : '0'}" class="pin-pulse" id="pulse-${p.id}" />
+          <!-- 外光圈 (半徑由 CSS/屬性平滑過渡，座標絕對固定) -->
+          <circle cx="${p.mapX}" cy="${p.mapY}" r="${p.id === currentSelectedId ? '12.5' : '8.5'}" fill="#0a192f" stroke="${color}" stroke-width="${p.id === currentSelectedId ? '3.5' : '2.2'}" class="pin-outer" />
+          <!-- 內部核心點 -->
+          <circle cx="${p.mapX}" cy="${p.mapY}" r="${p.id === currentSelectedId ? '6' : '3.5'}" fill="${p.id === currentSelectedId ? '#ffffff' : color}" class="pin-inner" />
+          <!-- 物種中文名稱固定標籤 -->
+          <text 
+            x="${p.mapX}" 
+            y="${p.mapY + (p.mapY > 520 ? -15 : 18)}" 
+            fill="${p.id === currentSelectedId ? '#ffffff' : '#cbd5e1'}" 
+            font-size="8.5" 
+            font-weight="${p.id === currentSelectedId ? 'bold' : 'normal'}" 
+            text-anchor="middle"
+            class="pin-label"
+            filter="drop-shadow(0 1px 2px rgba(0,0,0,0.9))"
+          >${p.nameZh}</text>
+        `;
+
+        // 懸停與點擊事件
+        g.addEventListener("mouseenter", (e) => showPinTooltip(e, p));
+        g.addEventListener("mouseleave", hidePinTooltip);
+        g.addEventListener("click", () => {
+          selectPenguin(p.id, false); // 點擊地圖標記時不強制捲動頁面，避免地圖跳動
+        });
+
+        pinsLayer.appendChild(g);
+      });
+
+      updateMapPinVisibility();
+    }
+
+    /**
+     * 更新地圖標記的選取外觀 (不重建 DOM，零跳動)
+     */
+    function updateMapPinStates(selectedId) {
+      PENGUIN_DATA.forEach(p => {
+        const pin = document.getElementById(`pin-${p.id}`);
+        if (!pin) return;
+
+        const isSelected = p.id === selectedId;
+        const color = getHabitatColor(p.habitatType);
+
+        if (isSelected) {
+          pin.classList.add("active");
+        } else {
+          pin.classList.remove("active");
+        }
+
+        const pulse = document.getElementById(`pulse-${p.id}`);
+        if (pulse) {
+          pulse.style.opacity = isSelected ? "0.45" : "0";
+        }
+
+        const outer = pin.querySelector(".pin-outer");
+        if (outer) {
+          outer.setAttribute("r", isSelected ? "12.5" : "8.5");
+          outer.setAttribute("stroke-width", isSelected ? "3.5" : "2.2");
+        }
+
+        const inner = pin.querySelector(".pin-inner");
+        if (inner) {
+          inner.setAttribute("r", isSelected ? "6" : "3.5");
+          inner.setAttribute("fill", isSelected ? "#ffffff" : color);
+        }
+
+        const label = pin.querySelector(".pin-label");
+        if (label) {
+          label.setAttribute("fill", isSelected ? "#ffffff" : "#cbd5e1");
+          label.setAttribute("font-weight", isSelected ? "bold" : "normal");
+        }
+      });
+    }
+
+    /**
+     * 依搜尋與篩選條件更新標記的可見度
+     */
+    function updateMapPinVisibility() {
+      const filteredList = getFilteredPenguins();
+      const filteredIds = new Set(filteredList.map(p => p.id));
+
+      PENGUIN_DATA.forEach(p => {
+        const pin = document.getElementById(`pin-${p.id}`);
+        if (!pin) return;
+        const isVisible = filteredIds.has(p.id);
+        pin.style.opacity = isVisible ? "1" : "0.2";
+        pin.style.pointerEvents = isVisible ? "auto" : "none";
+      });
+    }
+
+    /**
+     * 懸浮提示 Tooltip
+     */
+    const tooltip = document.getElementById("mapTooltip");
+
+    function showPinTooltip(e, p) {
+      const viewport = document.getElementById("mapViewport");
+      const rect = viewport.getBoundingClientRect();
+      const svg = document.getElementById("worldMapSvg");
+      const pt = svg.createSVGPoint();
+      pt.x = p.mapX;
+      pt.y = p.mapY;
+      const screenPt = pt.matrixTransform(svg.getScreenCTM());
+
+      tooltip.innerHTML = `
+        <div style="font-weight:700; font-size:0.85rem; margin-bottom:2px;">🐧 ${p.nameZh} (${p.nameEn})</div>
+        <div style="color:#94a3b8; font-size:0.75rem;">棲地：${p.habitatType} · ${p.locationLabel}</div>
+      `;
+      tooltip.style.left = `${screenPt.x - rect.left}px`;
+      tooltip.style.top = `${screenPt.y - rect.top}px`;
+      tooltip.style.display = "block";
+    }
+
+    function hidePinTooltip() {
+      tooltip.style.display = "none";
+    }
+
+    /**
+     * 更新篩選按鈕計數 (共 18 種物種)
+     */
+    function updateFilterCounts() {
+      document.getElementById("countAll").textContent = PENGUIN_DATA.length;
+      
+      const counts = { "極地": 0, "亞極地": 0, "溫帶": 0, "較溫暖地區": 0 };
+      PENGUIN_DATA.forEach(p => {
+        p.habitats.forEach(h => {
+          if (counts[h] !== undefined) counts[h]++;
+        });
+      });
+
+      document.getElementById("countPolar").textContent = counts["極地"];
+      document.getElementById("countSubpolar").textContent = counts["亞極地"];
+      document.getElementById("countTemperate").textContent = counts["溫帶"];
+      document.getElementById("countWarm").textContent = counts["較溫暖地區"];
+    }
+
+    /**
+     * 取得符合當前搜尋與篩選的企鵝列表
+     */
+    function getFilteredPenguins() {
+      const q = searchQuery.trim().toLowerCase();
+      return PENGUIN_DATA.filter(p => {
+        // 環境篩選
+        const matchHabitat = activeFilter === "all" || p.habitats.includes(activeFilter) || p.habitatType === activeFilter;
+        if (!matchHabitat) return false;
+
+        // 搜尋篩選 (中文、英文、學名、地區、環境、特徵)
+        if (!q) return true;
+        const searchPool = `${p.nameZh} ${p.nameEn} ${p.scientificName} ${p.regions} ${p.locationLabel} ${p.habitats.join(' ')} ${p.diagnosticTraits ? p.diagnosticTraits.join(' ') : ''}`.toLowerCase();
+        return searchPool.includes(q);
+      });
+    }
+
+    /**
+     * 渲染企鵝圖鑑網格 (支援圖鑑卡片模式 & 參考大圖牆模式)
+     */
+    function renderGallery() {
+      const grid = document.getElementById("galleryGrid");
+      const compContainer = document.getElementById("comparisonContainer");
+      const sideBySide = document.getElementById("sideBySideContainer");
+      const emptyState = document.getElementById("emptyState");
+      const countBadge = document.getElementById("galleryCountBadge");
+
+      const filtered = getFilteredPenguins();
+      countBadge.textContent = `顯示中：${filtered.length} / ${PENGUIN_DATA.length} 種`;
+
+      if (filtered.length === 0) {
+        grid.style.display = "none";
+        compContainer.style.display = "none";
+        sideBySide.style.display = "none";
+        emptyState.style.display = "flex";
+        return;
+      }
+
+      emptyState.style.display = "none";
+
+      if (currentViewMode === "compare") {
+        grid.style.display = "none";
+        sideBySide.style.display = "none";
+        compContainer.style.display = "block";
+        renderComparisonTable();
+        return;
+      }
+
+      if (currentViewMode === "sidebyside") {
+        grid.style.display = "none";
+        compContainer.style.display = "none";
+        sideBySide.style.display = "flex";
+        renderSideBySide();
+        return;
+      }
+
+      compContainer.style.display = "none";
+      sideBySide.style.display = "none";
+      grid.style.display = "grid";
+      
+      const isPhotoMode = currentViewMode === "photo";
+      grid.className = isPhotoMode ? "gallery-grid photo-mode" : "gallery-grid";
+      grid.innerHTML = "";
+
+      filtered.forEach(p => {
+        const isSelected = p.id === currentSelectedId;
+        const color = getHabitatColor(p.habitatType);
+
+        const card = document.createElement("div");
+        card.className = `penguin-card ${isSelected ? 'selected' : ''}`;
+        card.setAttribute("data-id", p.id);
+        
+        // 關鍵特徵摘要徽章
+        const traitsHtml = p.diagnosticTraits && p.diagnosticTraits.length > 0 
+          ? `<span class="trait-badge">${p.diagnosticTraits[0]}</span>`
+          : "";
+
+        if (isPhotoMode) {
+          // 參考相片大圖牆模式：凸顯滿版野生真實相片、攝影師、點擊檢視大圖
+          card.innerHTML = `
+            <div class="card-photo-box" title="點擊檢視 ${p.nameZh} 高解析大圖">
+              <img class="card-img" id="card-img-${p.id}" alt="${p.nameZh} 生態相片" loading="lazy" />
+              <div class="card-badge-top" style="border-left: 3px solid ${color};">
+                <span>${p.habitatType}</span>
+              </div>
+              <div class="card-photo-overlay">
+                <div>
+                  <h4>${p.nameZh}</h4>
+                  <p>${p.nameEn} · ${p.locationLabel}</p>
+                </div>
+                <button class="card-zoom-btn" title="放大檢視相片" onclick="event.stopPropagation(); selectPenguin('${p.id}'); openImageModal();">
+                  🔍
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.75rem; color:var(--text-muted); font-style:italic;">${p.scientificName}</span>
+                <span class="card-iucn-pill ${p.iucnClass}">${p.iucn.split(' ')[0]}</span>
+              </div>
+              <div style="font-size:0.78rem; color:var(--text-body); margin-top:0.25rem;">
+                <strong>辨識重點：</strong> ${p.diagnosticTraits ? p.diagnosticTraits.slice(0, 2).join(' · ') : ''}
+              </div>
+            </div>
+          `;
+        } else {
+          // 一般圖鑑檔案卡模式
+          card.innerHTML = `
+            <div class="card-photo-box" title="點擊選取 ${p.nameZh}">
+              <img class="card-img" id="card-img-${p.id}" alt="${p.nameZh} 生態相片" loading="lazy" />
+              <div class="card-badge-top" style="border-left: 3px solid ${color};">
+                <span>${p.habitatType}</span>
+              </div>
+              <div class="card-active-indicator">目前檢視中</div>
+            </div>
+            <div class="card-body">
+              <div class="card-title-row">
+                <div>
+                  <div class="card-name-zh">${p.nameZh}</div>
+                  <div class="card-name-en">${p.nameEn}</div>
+                </div>
+                <span class="card-iucn-pill ${p.iucnClass}">${p.iucn.split(' ')[0]}</span>
+              </div>
+              <div class="card-region-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span>${p.regions}</span>
+              </div>
+              <div class="card-footer">
+                <div style="display:flex; align-items:center; gap:0.35rem;">
+                  ${traitsHtml}
+                </div>
+                <span class="card-action-hint">
+                  生態詳情
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </span>
+              </div>
+            </div>
+          `;
+        }
+
+        const cardImg = card.querySelector(`#card-img-${p.id}`);
+        setupImageWithFallback(cardImg, p);
+
+        card.addEventListener("click", () => {
+          selectPenguin(p.id, true);
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    /**
+     * 渲染特徵對照表模式 (Comparison Matrix Table)
+     */
+    function renderComparisonTable() {
+      const tbody = document.getElementById("comparisonTableBody");
+      tbody.innerHTML = "";
+
+      const filtered = getFilteredPenguins();
+      filtered.forEach(p => {
+        const tr = document.createElement("tr");
+        if (p.id === currentSelectedId) tr.classList.add("active-row");
+        tr.setAttribute("data-id", p.id);
+
+        const traitsText = p.diagnosticTraits ? p.diagnosticTraits.join("、") : "";
+
+        tr.innerHTML = `
+          <td>
+            <img class="table-thumb" id="table-thumb-${p.id}" alt="${p.nameZh}" />
+          </td>
+          <td>
+            <strong>${p.nameZh}</strong>
+          </td>
+          <td>
+            <div style="font-weight:600;">${p.nameEn}</div>
+            <div style="font-style:italic; font-size:0.75rem; color:var(--text-muted);">${p.scientificName}</div>
+          </td>
+          <td>
+            <span class="card-iucn-pill ${p.iucnClass}">${p.iucn}</span>
+          </td>
+          <td>${p.habitatType}</td>
+          <td style="max-width:240px; font-size:0.8rem; color:var(--ocean-mid);">
+            ${traitsText}
+          </td>
+          <td style="font-size:0.8rem; white-space:nowrap;">${p.size.split('/')[0]}</td>
+          <td style="font-size:0.8rem;">${p.locationLabel}</td>
+        `;
+
+        const thumbImg = tr.querySelector(`#table-thumb-${p.id}`);
+        setupImageWithFallback(thumbImg, p);
+
+        tr.addEventListener("click", () => {
+          selectPenguin(p.id, true);
+          document.querySelectorAll(".comparison-table tr").forEach(r => r.classList.remove("active-row"));
+          tr.classList.add("active-row");
+        });
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    /**
+     * 初始化相似種比對下拉選單
+     */
+    function initSideBySideDropdowns() {
+      const selectA = document.getElementById("compareSelectA");
+      const selectB = document.getElementById("compareSelectB");
+      selectA.innerHTML = "";
+      selectB.innerHTML = "";
+
+      PENGUIN_DATA.forEach(p => {
+        const optA = document.createElement("option");
+        optA.value = p.id;
+        optA.textContent = `${p.nameZh} (${p.nameEn})`;
+        selectA.appendChild(optA);
+
+        const optB = document.createElement("option");
+        optB.value = p.id;
+        optB.textContent = `${p.nameZh} (${p.nameEn})`;
+        selectB.appendChild(optB);
+      });
+
+      selectA.value = "emperor";
+      selectB.value = "king";
+
+      selectA.addEventListener("change", renderSideBySide);
+      selectB.addEventListener("change", renderSideBySide);
+
+      // 經典預設按鈕群
+      document.querySelectorAll(".preset-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const pair = btn.getAttribute("data-pair").split(":");
+          selectA.value = pair[0];
+          selectB.value = pair[1];
+          renderSideBySide();
+        });
+      });
+    }
+
+    /**
+     * 渲染相似種相片比對模式
+     */
+    function renderSideBySide() {
+      const idA = document.getElementById("compareSelectA").value;
+      const idB = document.getElementById("compareSelectB").value;
+      const pA = PENGUIN_DATA.find(p => p.id === idA) || PENGUIN_DATA[0];
+      const pB = PENGUIN_DATA.find(p => p.id === idB) || PENGUIN_DATA[2];
+
+      const grid = document.getElementById("sideBySideCardsGrid");
+      grid.innerHTML = `
+        <!-- 物種 A 卡片 -->
+        <div class="sidebyside-card">
+          <div class="sidebyside-photo-box" onclick="selectPenguin('${pA.id}'); openImageModal();" title="點擊放大檢視 ${pA.nameZh} 參考相片">
+            <img id="side-img-${pA.id}" alt="${pA.nameZh} 野生相片" />
+            <div class="ref-badge-top">
+              <span>${pA.nameZh} · 參考相片</span>
+            </div>
+            <div class="zoom-hint-badge">🔍 點擊看大圖</div>
+          </div>
+          <div class="sidebyside-card-body">
+            <div style="display:flex; justify-content:space-between; align-items:baseline;">
+              <div>
+                <h3 style="font-size:1.35rem; color:var(--ocean-dark); font-weight:800;">${pA.nameZh}</h3>
+                <div style="font-size:0.85rem; color:var(--text-muted);">${pA.nameEn} · <em>${pA.scientificName}</em></div>
+              </div>
+              <span class="card-iucn-pill ${pA.iucnClass}">${pA.iucn}</span>
+            </div>
+
+            <table class="sidebyside-diff-table">
+              <tr>
+                <td class="diff-key">關鍵鑑定特徵</td>
+                <td><strong>${pA.diagnosticTraits ? pA.diagnosticTraits.join('、') : ''}</strong></td>
+              </tr>
+              <tr>
+                <td class="diff-key">體型與體重</td>
+                <td>${pA.size}</td>
+              </tr>
+              <tr>
+                <td class="diff-key">生活棲息地</td>
+                <td>${pA.locationLabel}</td>
+              </tr>
+              <tr>
+                <td class="diff-key">生態習性重點</td>
+                <td>${pA.summary}</td>
+              </tr>
+            </table>
+
+            <button class="ref-tool-btn" style="margin-top:auto;" onclick="selectPenguin('${pA.id}', true);">
+              在地圖與主面板定位此物種 →
+            </button>
+          </div>
+        </div>
+
+        <!-- 物種 B 卡片 -->
+        <div class="sidebyside-card">
+          <div class="sidebyside-photo-box" onclick="selectPenguin('${pB.id}'); openImageModal();" title="點擊放大檢視 ${pB.nameZh} 參考相片">
+            <img id="side-img-${pB.id}" alt="${pB.nameZh} 野生相片" />
+            <div class="ref-badge-top">
+              <span>${pB.nameZh} · 參考相片</span>
+            </div>
+            <div class="zoom-hint-badge">🔍 點擊看大圖</div>
+          </div>
+          <div class="sidebyside-card-body">
+            <div style="display:flex; justify-content:space-between; align-items:baseline;">
+              <div>
+                <h3 style="font-size:1.35rem; color:var(--ocean-dark); font-weight:800;">${pB.nameZh}</h3>
+                <div style="font-size:0.85rem; color:var(--text-muted);">${pB.nameEn} · <em>${pB.scientificName}</em></div>
+              </div>
+              <span class="card-iucn-pill ${pB.iucnClass}">${pB.iucn}</span>
+            </div>
+
+            <table class="sidebyside-diff-table">
+              <tr>
+                <td class="diff-key">關鍵鑑定特徵</td>
+                <td><strong>${pB.diagnosticTraits ? pB.diagnosticTraits.join('、') : ''}</strong></td>
+              </tr>
+              <tr>
+                <td class="diff-key">體型與體重</td>
+                <td>${pB.size}</td>
+              </tr>
+              <tr>
+                <td class="diff-key">生活棲息地</td>
+                <td>${pB.locationLabel}</td>
+              </tr>
+              <tr>
+                <td class="diff-key">生態習性重點</td>
+                <td>${pB.summary}</td>
+              </tr>
+            </table>
+
+            <button class="ref-tool-btn" style="margin-top:auto;" onclick="selectPenguin('${pB.id}', true);">
+              在地圖與主面板定位此物種 →
+            </button>
+          </div>
+        </div>
+      `;
+
+      setupImageWithFallback(document.getElementById(`side-img-${pA.id}`), pA);
+      setupImageWithFallback(document.getElementById(`side-img-${pB.id}`), pB);
+    }
+
+    /**
+     * 更新企鵝詳細資訊面板 (包含生物辨識特徵標記與真實參考照片)
+     */
+    function updateDetailPanel(id) {
+      const p = PENGUIN_DATA.find(item => item.id === id) || PENGUIN_DATA[0];
+      if (!p) return;
+
+      document.getElementById("headerSpeciesName").textContent = p.nameZh;
+      document.getElementById("speciesNameZh").textContent = p.nameZh;
+      document.getElementById("speciesNameEn").textContent = p.nameEn;
+      document.getElementById("speciesScientific").textContent = p.scientificName;
+
+      // IUCN 狀態標籤
+      const iucnBadge = document.getElementById("detailIucnBadge");
+      iucnBadge.textContent = p.iucn;
+      iucnBadge.className = `card-iucn-pill ${p.iucnClass}`;
+
+      // 企鵝真實參考相片載入與備援
+      const detailImg = document.getElementById("detailImg");
+      setupImageWithFallback(detailImg, p);
+      detailImg.alt = `${p.nameZh} 生態參考相片`;
+
+      // 來源標註簡稱
+      const creditBrief = document.getElementById("photoCreditBrief");
+      if (creditBrief) {
+        creditBrief.textContent = p.imageCredit.split('/')[0].trim();
+      }
+
+      // 相片特徵標註圖層
+      renderPhotoAnnotations(p);
+
+      // 生物鑑別特徵標籤欄
+      const traitsWrap = document.getElementById("detailDiagnosticTraits");
+      traitsWrap.innerHTML = "";
+      if (p.diagnosticTraits && p.diagnosticTraits.length > 0) {
+        p.diagnosticTraits.forEach(trait => {
+          const badge = document.createElement("span");
+          badge.className = "trait-badge";
+          badge.textContent = trait;
+          traitsWrap.appendChild(badge);
+        });
+      }
+
+      // 棲地標籤
+      const habitatsWrap = document.getElementById("detailHabitats");
+      habitatsWrap.innerHTML = "";
+      p.habitats.forEach(h => {
+        const span = document.createElement("span");
+        span.className = "habitat-tag";
+        span.textContent = h;
+        habitatsWrap.appendChild(span);
+      });
+
+      // 簡短科普總結
+      document.getElementById("detailSummary").textContent = p.summary;
+
+      // 數值指標
+      document.getElementById("metricSize").textContent = p.size;
+      document.getElementById("metricSpeed").textContent = p.speed;
+      document.getElementById("metricDiet").textContent = p.diet;
+      document.getElementById("metricHabitatType").textContent = `${p.habitatType}生態系`;
+
+      // 冷知識
+      document.getElementById("detailFunFact").textContent = p.funFact;
+
+      // 代表性地理位置與座標
+      document.getElementById("detailRegionText").textContent = p.locationLabel;
+      document.getElementById("detailCoordsText").textContent = `(${p.latitude.toFixed(1)}°, ${p.longitude.toFixed(1)}°)`;
+    }
+
+    /**
+     * 渲染相片上的特徵標註點
+     */
+    function renderPhotoAnnotations(p) {
+      const layer = document.getElementById("photoAnnotationsLayer");
+      layer.innerHTML = "";
+
+      if (p.annotations && p.annotations.length > 0) {
+        p.annotations.forEach((ann, idx) => {
+          const point = document.createElement("div");
+          point.className = "photo-annotation-point";
+          point.style.left = `${ann.x}%`;
+          point.style.top = `${ann.y}%`;
+          point.innerHTML = `
+            <div class="point-dot">${idx + 1}</div>
+            <div class="point-callout">
+              <strong>${ann.label}</strong>: ${ann.desc}
+            </div>
+          `;
+          layer.appendChild(point);
+        });
+      }
+    }
+
+    /**
+     * 選取特定企鵝，並同步地圖、資訊面板與圖鑑卡片
+     */
+    function selectPenguin(id, scrollIntoView = false) {
+      currentSelectedId = id;
+
+      // 1. 更新地圖標記樣式 (非破壞式更新，無座標跳動)
+      updateMapPinStates(id);
+
+      // 2. 更新詳細資訊面板
+      updateDetailPanel(id);
+
+      // 3. 更新圖鑑卡片外框選取狀態
+      const cards = document.querySelectorAll(".penguin-card");
+      cards.forEach(card => {
+        if (card.getAttribute("data-id") === id) {
+          card.classList.add("selected");
+        } else {
+          card.classList.remove("selected");
+        }
+      });
+
+      // 4. 更新燈箱縮圖膠卷高亮狀態
+      updateFilmstripActive();
+
+      // 5. 僅在手機版從下方圖鑑點擊時才平滑滾動至資訊面板
+      if (scrollIntoView && window.innerWidth < 768) {
+        document.getElementById("detailCard").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    /**
+     * 渲染燈箱底部縮圖膠卷列 (全部 18 種企鵝)
+     */
+    function renderModalFilmstrip() {
+      const strip = document.getElementById("modalFilmstrip");
+      strip.innerHTML = "";
+
+      PENGUIN_DATA.forEach(p => {
+        const thumb = document.createElement("div");
+        thumb.className = `filmstrip-thumb ${p.id === currentSelectedId ? 'active' : ''}`;
+        thumb.setAttribute("id", `film-thumb-${p.id}`);
+        thumb.setAttribute("title", `${p.nameZh} (${p.nameEn})`);
+
+        thumb.innerHTML = `<img id="film-img-${p.id}" alt="${p.nameZh}" />`;
+        const img = thumb.querySelector("img");
+        setupImageWithFallback(img, p);
+
+        thumb.addEventListener("click", () => {
+          selectPenguin(p.id, false);
+          updateModalContent(p);
+          updateFilmstripActive();
+        });
+
+        strip.appendChild(thumb);
+      });
+    }
+
+    /**
+     * 更新燈箱膠卷中的選取中狀態
+     */
+    function updateFilmstripActive() {
+      document.querySelectorAll(".filmstrip-thumb").forEach(t => {
+        t.classList.toggle("active", t.getAttribute("id") === `film-thumb-${currentSelectedId}`);
+      });
+      // 自動橫向捲動至選取項
+      const activeThumb = document.getElementById(`film-thumb-${currentSelectedId}`);
+      if (activeThumb) {
+        activeThumb.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+      }
+    }
+
+    /**
+     * 更新燈箱相片與特徵文字內容
+     */
+    function updateModalContent(p) {
+      document.getElementById("modalTitle").textContent = `${p.nameZh} (${p.nameEn})`;
+      document.getElementById("modalSub").textContent = `${p.scientificName} · 代表棲地：${p.locationLabel}`;
+      
+      const modalImg = document.getElementById("modalImg");
+      setupImageWithFallback(modalImg, p);
+      modalImg.alt = `${p.nameZh} 高解析野外生態相片`;
+
+      const diagnosticText = p.diagnosticTraits ? p.diagnosticTraits.join(" · ") : "無特殊備註";
+      document.getElementById("modalDiagnostic").textContent = diagnosticText;
+      document.getElementById("modalCredit").innerHTML = `相片來源與授權：${p.imageCredit}`;
+
+      // 重設縮放比例
+      resetModalZoom();
+    }
+
+    /**
+     * 重設燈箱縮放比例
+     */
+    function resetModalZoom() {
+      modalZoomLevel = 1;
+      modalTranslate = { x: 0, y: 0 };
+      const img = document.getElementById("modalImg");
+      img.style.transform = `scale(1) translate(0px, 0px)`;
+    }
+
+    /**
+     * 設定燈箱縮放比例
+     */
+    function setModalZoom(level) {
+      modalZoomLevel = Math.max(0.7, Math.min(3.5, level));
+      const img = document.getElementById("modalImg");
+      img.style.transform = `scale(${modalZoomLevel}) translate(${modalTranslate.x}px, ${modalTranslate.y}px)`;
+    }
+
+    /**
+     * 開啟大圖檢視視窗 (含生物鑑定特徵標註)
+     */
+    function openImageModal() {
+      const p = PENGUIN_DATA.find(item => item.id === currentSelectedId) || PENGUIN_DATA[0];
+      updateModalContent(p);
+      updateFilmstripActive();
+
+      const modal = document.getElementById("imageModal");
+      modal.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    /**
+     * 關閉大圖檢視視窗
+     */
+    function closeImageModal() {
+      const modal = document.getElementById("imageModal");
+      modal.classList.remove("open");
+      document.body.style.overflow = "";
+      resetModalZoom();
+    }
+
+    /**
+     * 綁定使用者操作事件
+     */
+    function bindEvents() {
+      // 搜尋輸入框事件
+      const searchInput = document.getElementById("searchInput");
+      const clearSearchBtn = document.getElementById("clearSearchBtn");
+
+      searchInput.addEventListener("input", (e) => {
+        searchQuery = e.target.value;
+        clearSearchBtn.style.display = searchQuery ? "flex" : "none";
+        onSearchOrFilterChange();
+      });
+
+      clearSearchBtn.addEventListener("click", () => {
+        searchInput.value = "";
+        searchQuery = "";
+        clearSearchBtn.style.display = "none";
+        onSearchOrFilterChange();
+        searchInput.focus();
+      });
+
+      // 環境篩選按鈕群
+      const filterChips = document.querySelectorAll(".filter-chip");
+      filterChips.forEach(chip => {
+        chip.addEventListener("click", () => {
+          filterChips.forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+          activeFilter = chip.getAttribute("data-filter");
+          onSearchOrFilterChange();
+        });
+      });
+
+      // 顯示模式切換工具 (圖鑑檔案 / 參考大圖牆 / 特徵對照表 / 相似種相片比對)
+      const modeCardBtn = document.getElementById("modeCardBtn");
+      const modePhotoBtn = document.getElementById("modePhotoBtn");
+      const modeCompareBtn = document.getElementById("modeCompareBtn");
+      const modeSideBySideBtn = document.getElementById("modeSideBySideBtn");
+
+      function setActiveViewMode(mode) {
+        currentViewMode = mode;
+        modeCardBtn.classList.toggle("active", mode === "card");
+        modePhotoBtn.classList.toggle("active", mode === "photo");
+        modeCompareBtn.classList.toggle("active", mode === "compare");
+        modeSideBySideBtn.classList.toggle("active", mode === "sidebyside");
+        renderGallery();
+      }
+
+      modeCardBtn.addEventListener("click", () => setActiveViewMode("card"));
+      modePhotoBtn.addEventListener("click", () => setActiveViewMode("photo"));
+      modeCompareBtn.addEventListener("click", () => setActiveViewMode("compare"));
+      modeSideBySideBtn.addEventListener("click", () => setActiveViewMode("sidebyside"));
+
+      // 重設所有篩選按鈕
+      document.getElementById("resetAllBtn").addEventListener("click", resetAllFilters);
+      document.getElementById("emptyResetBtn").addEventListener("click", resetAllFilters);
+
+      // 上一種 / 下一種企鵝導覽
+      document.getElementById("prevPenguinBtn").addEventListener("click", () => navigatePenguin(-1));
+      document.getElementById("nextPenguinBtn").addEventListener("click", () => navigatePenguin(1));
+
+      // 詳細面板上的參考相片快捷按鈕
+      document.getElementById("detailPhotoTrigger").addEventListener("click", openImageModal);
+      document.getElementById("btnInspectPhoto").addEventListener("click", openImageModal);
+      
+      const btnTogglePhotoTraits = document.getElementById("btnTogglePhotoTraits");
+      btnTogglePhotoTraits.addEventListener("click", () => {
+        isShowingAnnotations = !isShowingAnnotations;
+        btnTogglePhotoTraits.classList.toggle("active", isShowingAnnotations);
+        const layer = document.getElementById("photoAnnotationsLayer");
+        layer.classList.toggle("show", isShowingAnnotations);
+      });
+
+      document.getElementById("btnCompareLookalike").addEventListener("click", () => {
+        const cur = PENGUIN_DATA.find(p => p.id === currentSelectedId);
+        if (cur && cur.comparePair) {
+          document.getElementById("compareSelectA").value = cur.id;
+          document.getElementById("compareSelectB").value = cur.comparePair;
+          setActiveViewMode("sidebyside");
+          document.getElementById("sideBySideContainer").scrollIntoView({ behavior: "smooth" });
+        }
+      });
+
+      // 在地圖上定位 (平滑外圈光芒閃爍，不使用 CSS scale 以防跳動)
+      document.getElementById("focusMapBtn").addEventListener("click", () => {
+        const mapCard = document.getElementById("mapCard");
+        mapCard.scrollIntoView({ behavior: "smooth", block: "center" });
+        const pin = document.getElementById(`pin-${currentSelectedId}`);
+        if (pin) {
+          const outer = pin.querySelector(".pin-outer");
+          if (outer) {
+            outer.setAttribute("r", "18");
+            outer.setAttribute("stroke-width", "5");
+            setTimeout(() => {
+              outer.setAttribute("r", "12.5");
+              outer.setAttribute("stroke-width", "3.5");
+            }, 500);
+          }
+        }
+      });
+
+      // 地圖視角快捷按鈕
+      const mapSvg = document.getElementById("worldMapSvg");
+      const presetBtns = document.querySelectorAll(".map-preset-btn");
+      presetBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const view = btn.getAttribute("data-view");
+          switch (view) {
+            case "world":
+              mapSvg.setAttribute("viewBox", "0 0 1000 580");
+              break;
+            case "antarctica":
+              mapSvg.setAttribute("viewBox", "150 450 700 130");
+              break;
+            case "subantarctic":
+              mapSvg.setAttribute("viewBox", "200 240 450 320");
+              break;
+            case "oceania":
+              mapSvg.setAttribute("viewBox", "720 280 280 260");
+              break;
+          }
+        });
+      });
+
+      // 燈箱縮放控制
+      document.getElementById("btnZoomIn").addEventListener("click", () => setModalZoom(modalZoomLevel + 0.35));
+      document.getElementById("btnZoomOut").addEventListener("click", () => setModalZoom(modalZoomLevel - 0.35));
+      document.getElementById("btnZoom100").addEventListener("click", () => setModalZoom(1));
+      document.getElementById("btnZoomReset").addEventListener("click", resetModalZoom);
+
+      // 燈箱左右按鈕
+      document.getElementById("modalPrevBtn").addEventListener("click", (e) => {
+        e.stopPropagation();
+        navigatePenguin(-1);
+        openImageModal();
+      });
+
+      document.getElementById("modalNextBtn").addEventListener("click", (e) => {
+        e.stopPropagation();
+        navigatePenguin(1);
+        openImageModal();
+      });
+
+      // 燈箱關閉
+      document.getElementById("modalCloseBtn").addEventListener("click", closeImageModal);
+      const modal = document.getElementById("imageModal");
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          closeImageModal();
+        }
+      });
+
+      // 鍵盤支援
+      document.addEventListener("keydown", (e) => {
+        if (modal.classList.contains("open")) {
+          if (e.key === "Escape") closeImageModal();
+          if (e.key === "ArrowLeft") { navigatePenguin(-1); openImageModal(); }
+          if (e.key === "ArrowRight") { navigatePenguin(1); openImageModal(); }
+          if (e.key === "+" || e.key === "=") setModalZoom(modalZoomLevel + 0.35);
+          if (e.key === "-") setModalZoom(modalZoomLevel - 0.35);
+          if (e.key === "0") resetModalZoom();
+        }
+      });
+    }
+
+    /**
+     * 當搜尋或篩選變更時的處理
+     */
+    function onSearchOrFilterChange() {
+      const filtered = getFilteredPenguins();
+      renderGallery();
+      updateMapPinVisibility();
+
+      // 若目前選取的企鵝不在篩選結果中，自動切換至第一筆符合者
+      const isCurrentVisible = filtered.some(p => p.id === currentSelectedId);
+      if (!isCurrentVisible && filtered.length > 0) {
+        selectPenguin(filtered[0].id, false);
+      }
+    }
+
+    /**
+     * 重設所有篩選與搜尋
+     */
+    function resetAllFilters() {
+      searchQuery = "";
+      activeFilter = "all";
+      document.getElementById("searchInput").value = "";
+      document.getElementById("clearSearchBtn").style.display = "none";
+      
+      const filterChips = document.querySelectorAll(".filter-chip");
+      filterChips.forEach(c => {
+        if (c.getAttribute("data-filter") === "all") {
+          c.classList.add("active");
+        } else {
+          c.classList.remove("active");
+        }
+      });
+
+      document.getElementById("worldMapSvg").setAttribute("viewBox", "0 0 1000 580");
+      onSearchOrFilterChange();
+    }
+
+    /**
+     * 上一種 / 下一種企鵝切換
+     */
+    function navigatePenguin(direction) {
+      const filtered = getFilteredPenguins();
+      if (filtered.length <= 1) return;
+
+      const currentIndex = filtered.findIndex(p => p.id === currentSelectedId);
+      let nextIndex = currentIndex + direction;
+      if (nextIndex < 0) nextIndex = filtered.length - 1;
+      if (nextIndex >= filtered.length) nextIndex = 0;
+
+      selectPenguin(filtered[nextIndex].id, false);
+    }
+
+    // 頁面載入完成後啟動
+    window.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>
